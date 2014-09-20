@@ -1,0 +1,46 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_overview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.productions.pieter.notificationanalyzer.OverviewFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title_counter_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_counter_header"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/title_counter"
+                android:text="45"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSizeCounter"/>
+            <TextView
+                android:id="@+id/title_counter_suffix"
+                android:text="@string/title_counter_suffix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/title_counter"
+                android:layout_alignBottom="@id/title_counter"
+                android:layout_marginLeft="7dp"
+                android:layout_marginBottom="7dp"/>
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</FrameLayout>
