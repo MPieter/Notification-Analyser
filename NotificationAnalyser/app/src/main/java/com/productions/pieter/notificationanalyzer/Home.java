@@ -1,6 +1,8 @@
 package com.productions.pieter.notificationanalyzer;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -19,17 +21,40 @@ public class Home extends Activity {
         homePagerAdapter = new HomePagerAdapter(getFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(homePagerAdapter);
+        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
-//        ActionBar actionBar = getActionBar();
-//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-//        ActionBar.Tab tabOverview = actionBar.newTab().setText("Overview");
-//        ActionBar.Tab tabHistory = actionBar.newTab().setText("History");
-//
-//        tabOverview.setTabListener(new NavigationTabListener<OverviewFragment>(this, R.id.fragment_overview, OverviewFragment.class));
-//        tabHistory.setTabListener(new NavigationTabListener<HistoryFragment>(this, R.id.fragment_history, HistoryFragment.class));
-//
-//        actionBar.addTab(tabOverview);
-//        actionBar.addTab(tabHistory);
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                getActionBar().setSelectedNavigationItem(position);
+            }
+        });
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            @Override
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+                ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+                // No special actions.
+            }
+
+            @Override
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+                // User selected the already selected tab. In this case do nothing.
+            }
+        };
+        ActionBar.Tab tabOverview = actionBar.newTab().setText("Overview").setTabListener(tabListener);
+        ActionBar.Tab tabHistory = actionBar.newTab().setText("History").setTabListener(tabListener);
+
+        actionBar.addTab(tabOverview);
+        actionBar.addTab(tabHistory);
     }
 
 
