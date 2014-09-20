@@ -3,7 +3,7 @@
   <component name="FacetManager">
     <facet type="java-gradle" name="Java-Gradle">
       <configuration>
-        <option name="BUILD_FOLDER_PATH" value="$USER_HOME$/AndroidStudioProjects/NotificationAnalyzer/build" />
+        <option name="BUILD_FOLDER_PATH" value="$MODULE_DIR$/build" />
       </configuration>
     </facet>
   </component>
