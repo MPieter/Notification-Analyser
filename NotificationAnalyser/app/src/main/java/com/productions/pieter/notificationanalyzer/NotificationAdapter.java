@@ -1,6 +1,7 @@
 package com.productions.pieter.notificationanalyzer;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -37,16 +38,22 @@ public class NotificationAdapter extends ArrayAdapter<NotificationView> {
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.app_progress_bar);
         ImageView imageView = (ImageView) view.findViewById(R.id.app_image);
 
+        PackageManager packageManager = view.getContext().getPackageManager();
         NotificationView nv = this.getItem(position);
-        appName.setText(nv.AppName);
-        appCount.setText(Integer.toString(nv.Notifications));
-        progressBar.setProgress((int) ((double)nv.Notifications / (double)nv.MaxNotifications * 100));
+        String str_appName = null;
+        Drawable icon = null;
         try {
-            Drawable icon = view.getContext().getPackageManager().getApplicationIcon(nv.AppName);
-            imageView.setImageDrawable(icon);
+            ApplicationInfo appInfo = packageManager.getApplicationInfo(nv.AppName, 0);
+            str_appName = packageManager.getApplicationLabel(appInfo).toString();
+            icon = packageManager.getApplicationIcon(appInfo);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+        if (str_appName != null) appName.setText(str_appName); else appName.setText(nv.AppName);
+        appCount.setText(Integer.toString(nv.Notifications));
+        progressBar.setProgress((int) ((double)nv.Notifications / (double)nv.MaxNotifications * 100));
+        if (icon != null) imageView.setImageDrawable(icon);
 
         return view;
     }
