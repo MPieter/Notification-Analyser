@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="main_counter_width">170dp</dimen>
     <dimen name="textSizeCounter">40sp</dimen>
+    <dimen name="list_el_margin_top">8dp</dimen>
+    <dimen name="list_el_margin_bottom">5dp</dimen>
 </resources>

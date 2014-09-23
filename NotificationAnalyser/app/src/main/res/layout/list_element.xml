@@ -1,33 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_notification_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/list_el_margin_top"
+    android:layout_marginBottom="@dimen/list_el_margin_bottom">
     <ImageView
         android:id="@+id/app_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher"/>
-    <RelativeLayout
+        android:src="@drawable/ic_launcher"
+        android:layout_margin="5dp"/>
+
+    <TextView
+        android:id="@+id/app_name"
+        android:text="App Name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/app_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="App Name"/>
-        <TextView
-            android:id="@+id/app_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="23"
-            android:layout_alignParentRight="true"/>
-        <ProgressBar
-            style="@android:style/Widget.Holo.ProgressBar.Horizontal"
-            android:id="@+id/app_progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/app_name"/>
-        </RelativeLayout>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/app_image"
+        android:layout_toRightOf="@id/app_image"/>
+    <TextView
+        android:id="@+id/app_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="23"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/app_image"/>
+    <ProgressBar
+        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+        android:id="@+id/app_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/app_image"
+        android:layout_toRightOf="@id/app_image"
+        android:layout_marginBottom="5dp"/>
+</RelativeLayout>
