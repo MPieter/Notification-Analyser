@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by pieter on 21/09/14.
  */
-@DatabaseTable(tableName = "Notifications")
+@DatabaseTable(tableName = "Notifications", daoClass = NotificationItemDaoImpl.class)
 public class NotificationItem {
     public static final String FIELD_TABLE_NAME = "Notifications";
     public static final String FIELD_KEY = "Key";

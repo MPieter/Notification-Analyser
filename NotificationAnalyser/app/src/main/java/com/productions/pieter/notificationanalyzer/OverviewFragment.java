@@ -39,24 +39,10 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
-        int maxCount = 0;
         List<NotificationView> list = new LinkedList<NotificationView>();
         try {
-            // TODO enkel laatste 24u selecteren
-            Dao<NotificationItem, Integer> dao = getDatabaseHelper().getNotificationDao();
-            GenericRawResults<String[]> rawResults = dao.queryRaw(
-                    "SELECT " + NotificationItem.FIELD_APPNAME
-                            + ", COUNT(*) FROM " + NotificationItem.FIELD_TABLE_NAME
-                            + " GROUP BY " + NotificationItem.FIELD_APPNAME);
-            List<String[]> results = rawResults.getResults();
-
-            for (int i = 0; i < results.size(); i++) {
-                int ntfCount = Integer.parseInt(results.get(i)[1]);
-                maxCount = ntfCount > maxCount ? ntfCount : maxCount;
-            }
-            for (int i = 0; i < results.size(); i++) {
-                list.add(new NotificationView(results.get(i)[0], Integer.parseInt(results.get(i)[1]), maxCount));
-            }
+            NotificationItemDao dao = getDatabaseHelper().getNotificationDao();
+            list = dao.getSummaryLast24Hours();
         } catch (SQLException e) {
             e.printStackTrace();
         }

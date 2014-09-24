@@ -21,7 +21,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
 
-    private Dao<NotificationItem, Integer> notificationDao = null;
+    private NotificationItemDao notificationDao = null;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -55,7 +55,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      * Returns the Database Access Object (DAO) for NotificationItem class. It will create it or
      * just give the cached value.
      */
-    public Dao<NotificationItem, Integer> getNotificationDao() throws SQLException {
+    public NotificationItemDao getNotificationDao() throws SQLException {
         if (notificationDao == null) {
             notificationDao = getDao(NotificationItem.class);
         }
