@@ -18,58 +18,44 @@ import java.util.List;
 /**
  * Created by pieter on 17/09/14.
  */
-public class NotificationAdapter extends ArrayAdapter<NotificationView> {
-    private int totalCount = 0;
-
-    public NotificationAdapter(Context context, List<NotificationView> objects) {
+public class NotificationAdapter extends ArrayAdapter<NotificationAppView> {
+    public NotificationAdapter(Context context, List<NotificationAppView> objects) {
         super(context, 0, objects);
-        this.sort(new Comparator<NotificationView>() {
+        this.sort(new Comparator<NotificationAppView>() {
             @Override
-            public int compare(NotificationView notificationView, NotificationView notificationView2) {
-                return notificationView2.Notifications.compareTo(notificationView.Notifications);
+            public int compare(NotificationAppView notificationAppView, NotificationAppView notificationAppView2) {
+                return notificationAppView2.Notifications.compareTo(notificationAppView.Notifications);
             }
         });
-        this.insert(new NotificationView("", 0, 0), 0); // Insert extra element to make room for header
-        for (int i = 0; i < objects.size(); i++) {
-            totalCount += objects.get(i).Notifications;
-        }
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflator = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (position == 0) {
-            View view = inflator.inflate(R.layout.list_header, null);
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.list_element, null);
+        TextView appName = (TextView) view.findViewById(R.id.app_name);
+        TextView appCount = (TextView) view.findViewById(R.id.app_count);
+        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.app_progress_bar);
+        ImageView imageView = (ImageView) view.findViewById(R.id.app_image);
 
-            TextView titleCounter = (TextView) view.findViewById(R.id.title_counter);
-            titleCounter.setText(Integer.toString(totalCount));
-            return view;
-        } else {
-            View view = inflator.inflate(R.layout.list_element, null);
-            TextView appName = (TextView) view.findViewById(R.id.app_name);
-            TextView appCount = (TextView) view.findViewById(R.id.app_count);
-            ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.app_progress_bar);
-            ImageView imageView = (ImageView) view.findViewById(R.id.app_image);
-
-            PackageManager packageManager = view.getContext().getPackageManager();
-            NotificationView nv = this.getItem(position);
-            String str_appName = null;
-            Drawable icon = null;
-            try {
-                ApplicationInfo appInfo = packageManager.getApplicationInfo(nv.AppName, 0);
-                str_appName = packageManager.getApplicationLabel(appInfo).toString();
-                icon = packageManager.getApplicationIcon(appInfo);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            if (str_appName != null) appName.setText(str_appName);
-            else appName.setText(nv.AppName);
-            appCount.setText(Integer.toString(nv.Notifications));
-            progressBar.setProgress((int) ((double) nv.Notifications / (double) nv.MaxNotifications * 100));
-            if (icon != null) imageView.setImageDrawable(icon);
-
-            return view;
+        PackageManager packageManager = view.getContext().getPackageManager();
+        NotificationAppView nv = this.getItem(position);
+        String str_appName = null;
+        Drawable icon = null;
+        try {
+            ApplicationInfo appInfo = packageManager.getApplicationInfo(nv.AppName, 0);
+            str_appName = packageManager.getApplicationLabel(appInfo).toString();
+            icon = packageManager.getApplicationIcon(appInfo);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
+
+        if (str_appName != null) appName.setText(str_appName);
+        else appName.setText(nv.AppName);
+        appCount.setText(Integer.toString(nv.Notifications));
+        progressBar.setProgress((int) ((double) nv.Notifications / (double) nv.MaxNotifications * 100));
+        if (icon != null) imageView.setImageDrawable(icon);
+
+        return view;
     }
 }
