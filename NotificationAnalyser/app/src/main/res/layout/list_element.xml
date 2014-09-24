@@ -8,8 +8,8 @@
     android:layout_marginBottom="@dimen/list_el_margin_bottom">
     <ImageView
         android:id="@+id/app_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/app_icon_width"
+        android:layout_height="@dimen/app_icon_height"
         android:src="@drawable/ic_launcher"
         android:layout_margin="5dp"/>
 

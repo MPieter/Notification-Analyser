@@ -39,7 +39,6 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
-        int totalCount = 0;
         int maxCount = 0;
         List<NotificationView> list = new LinkedList<NotificationView>();
         try {
@@ -53,7 +52,6 @@ public class OverviewFragment extends Fragment {
 
             for (int i = 0; i < results.size(); i++) {
                 int ntfCount = Integer.parseInt(results.get(i)[1]);
-                totalCount += ntfCount;
                 maxCount = ntfCount > maxCount ? ntfCount : maxCount;
             }
             for (int i = 0; i < results.size(); i++) {
@@ -67,9 +65,6 @@ public class OverviewFragment extends Fragment {
 
         ListView listView = (ListView) view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
-
-        TextView titleCounter = (TextView) view.findViewById(R.id.title_counter);
-        titleCounter.setText(Integer.toString(totalCount));
 
         return view;
     }

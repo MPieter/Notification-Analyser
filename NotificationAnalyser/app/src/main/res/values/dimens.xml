@@ -6,4 +6,6 @@
     <dimen name="textSizeCounter">40sp</dimen>
     <dimen name="list_el_margin_top">8dp</dimen>
     <dimen name="list_el_margin_bottom">5dp</dimen>
+    <dimen name="app_icon_width">48dp</dimen>
+    <dimen name="app_icon_height">48dp</dimen>
 </resources>
