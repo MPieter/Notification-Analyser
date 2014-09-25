@@ -5,4 +5,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="list_view">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/list_padding_left</item>
+        <item name="android:paddingTop">@dimen/list_padding_top</item>
+        <item name="android:paddingRight">@dimen/list_padding_right</item>
+        <item name="android:scrollbarStyle">outsideInset</item>
+    </style>
+
 </resources>

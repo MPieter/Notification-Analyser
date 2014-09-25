@@ -37,7 +37,7 @@ public class OverviewFragment extends Fragment {
         List<NotificationAppView> list = new LinkedList<NotificationAppView>();
         try {
             NotificationItemDao dao = getDatabaseHelper().getNotificationDao();
-            list = dao.getSummaryLast24Hours();
+            list = dao.getOverviewLast24Hours();
         } catch (SQLException e) {
             e.printStackTrace();
         }
