@@ -18,10 +18,12 @@
     <TextView
         android:id="@+id/app_detail_name"
         android:text="Application Name"
+        android:textSize="@dimen/textSize_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/app_detail_image"
-        android:layout_toRightOf="@id/app_detail_image"/>
+        android:layout_toRightOf="@id/app_detail_image"
+        android:layout_marginTop="5dp"/>
 
     <CheckBox
         android:layout_width="wrap_content"
