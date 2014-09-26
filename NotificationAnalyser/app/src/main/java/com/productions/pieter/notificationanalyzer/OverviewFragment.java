@@ -38,6 +38,25 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
+        View viewHeader = inflater.inflate(R.layout.list_header, null);
+
+        ListView listView = (ListView) view.findViewById(R.id.list_view);
+        listView.addHeaderView(viewHeader, null, false);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), AppDetail.class);
+                NotificationAppView clickedApp = (NotificationAppView) adapterView.getAdapter().getItem(i);
+                intent.putExtra(Intent.EXTRA_SUBJECT, clickedApp.AppName);
+                startActivity(intent);
+            }
+        });
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         List<NotificationAppView> list = new LinkedList<NotificationAppView>();
         try {
             NotificationItemDao dao = getDatabaseHelper().getNotificationDao();
@@ -50,26 +69,14 @@ public class OverviewFragment extends Fragment {
         for (int i = 0; i < list.size(); i++) {
             totalCount += list.get(i).Notifications;
         }
-        View viewHeader = inflater.inflate(R.layout.list_header, null);
 
-        TextView titleCounter = (TextView) viewHeader.findViewById(R.id.title_counter);
+        TextView titleCounter = (TextView) this.getActivity().findViewById(R.id.title_counter);
         titleCounter.setText(Integer.toString(totalCount));
 
-        NotificationAdapter adapter = new NotificationAdapter(view.getContext(), list);
+        NotificationAdapter adapter = new NotificationAdapter(this.getActivity(), list);
 
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
-        listView.addHeaderView(viewHeader, null, false);
+        ListView listView = (ListView) this.getActivity().findViewById(R.id.list_view);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), AppDetail.class);
-                NotificationAppView clickedApp = (NotificationAppView) adapterView.getAdapter().getItem(i);
-                intent.putExtra(Intent.EXTRA_SUBJECT, clickedApp.AppName);
-                startActivity(intent);
-            }
-        });
-        return view;
     }
 
     @Override

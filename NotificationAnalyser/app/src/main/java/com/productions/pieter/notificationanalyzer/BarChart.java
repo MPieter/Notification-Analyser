@@ -13,7 +13,9 @@ import com.productions.pieter.notificationanalyzer.Models.DatabaseHelper;
 import com.productions.pieter.notificationanalyzer.Models.NotificationItemDao;
 
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class BarChart extends View {
     private Paint paintBarZebra2 = new Paint();
     private Paint paintBarSelected = new Paint();
     private BarChartListener barChartListener;
+    private Date currentSelectedDate = null;
 
     public BarChart(Context context) {
         super(context);
@@ -61,35 +64,54 @@ public class BarChart extends View {
     }
 
     private void initBarChart() {
-        this.bars = new LinkedList<Bar>();
         this.paintBarZebra1.setColor(getResources().getColor(android.R.color.holo_blue_light));
         this.paintBarZebra2.setColor(getResources().getColor(android.R.color.holo_green_dark));
         this.paintBarSelected.setColor(getResources().getColor(android.R.color.white));
 
         if (this.isInEditMode()) {
             maxNotifications = 25;
+            this.bars = new LinkedList<Bar>();
             bars.add(new Bar(null, new NotificationDayView(new Date(), 10)));
             bars.add(new Bar(null, new NotificationDayView(new Date(), 15)));
             bars.add(new Bar(null, new NotificationDayView(new Date(), 25)));
             bars.add(new Bar(null, new NotificationDayView(new Date(), 18)));
             bars.add(new Bar(null, new NotificationDayView(new Date(), 7)));
         } else {
-            try {
-                NotificationItemDao dao = getDatabaseHelper().getNotificationDao();
-                List<NotificationDayView> list = dao.getSummaryLastDays();
-                for (NotificationDayView nf : list) {
-                    maxNotifications = nf.Notifications > maxNotifications ? nf.Notifications : maxNotifications;
-                }
+            this.update();
+        }
+    }
 
-                for (int i = 0; i < list.size(); i++) {
-                    NotificationDayView nf = list.get(i);
+    /**
+     * Method for updating the chart. Indicates to the chart that the underlying data has changed
+     * and thus that the data has to processed.
+     */
+    public void update() {
+        // TODO er moet getest worden dat de chart wel degelijk geupdate wordt bij een resume life cycle event
+        try {
+            this.bars = new LinkedList<Bar>();
+            NotificationItemDao dao = getDatabaseHelper().getNotificationDao();
+            List<NotificationDayView> list = dao.getSummaryLastDays();
+            for (NotificationDayView nf : list) {
+                maxNotifications = nf.Notifications > maxNotifications ? nf.Notifications : maxNotifications;
+            }
 
+            for (int i = 0; i < list.size(); i++) {
+                NotificationDayView nf = list.get(i);
+
+                if (currentSelectedDate != null) {
+                    Calendar date1 = new GregorianCalendar();
+                    date1.setTime(nf.Date);
+                    Calendar date2 = new GregorianCalendar();
+                    date2.setTime(this.currentSelectedDate);
+                    bars.add(new Bar(null, nf, date1.get(Calendar.DATE) == date2.get(Calendar.DATE)));
+                } else {
                     bars.add(new Bar(null, nf));
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        invalidate();
     }
 
     public DatabaseHelper getDatabaseHelper() {
@@ -138,6 +160,7 @@ public class BarChart extends View {
 
                     bars.get(i).isActive = true;
                     barChartListener.onBarClick(bars.get(i).ntf.Date);
+                    this.currentSelectedDate = bars.get(i).ntf.Date;
                     break;
                 }
             }
@@ -161,9 +184,13 @@ public class BarChart extends View {
         public Boolean isActive;
 
         public Bar(Rect rect, NotificationDayView ntf) {
+            this(rect, ntf, false);
+        }
+
+        public Bar(Rect rect, NotificationDayView ntf, Boolean isActive) {
             this.rect = rect;
             this.ntf = ntf;
-            this.isActive = false;
+            this.isActive = isActive;
         }
     }
 
