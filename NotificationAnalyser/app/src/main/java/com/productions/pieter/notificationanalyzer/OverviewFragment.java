@@ -1,14 +1,18 @@
 package com.productions.pieter.notificationanalyzer;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.productions.pieter.notificationanalyzer.Models.DatabaseHelper;
+import com.productions.pieter.notificationanalyzer.Models.NotificationItemDao;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -54,9 +58,17 @@ public class OverviewFragment extends Fragment {
         NotificationAdapter adapter = new NotificationAdapter(view.getContext(), list);
 
         ListView listView = (ListView) view.findViewById(R.id.list_view);
-        listView.addHeaderView(viewHeader);
+        listView.addHeaderView(viewHeader, null, false);
         listView.setAdapter(adapter);
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), AppDetail.class);
+                NotificationAppView clickedApp = (NotificationAppView) adapterView.getAdapter().getItem(i);
+                intent.putExtra(Intent.EXTRA_SUBJECT, clickedApp.AppName);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 

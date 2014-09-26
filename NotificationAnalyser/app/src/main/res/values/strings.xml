@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Notification Analyzer</string>
+    <string name="app_name">Notification Analyser</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="preference_file_key">com.productions.pieter.notificationAnalyzer.PREFERENCE_FILE_KEY</string>
@@ -11,5 +11,7 @@
     <string name="title_counter_suffix">Notifications</string>
     <string name="title_activity_history">History</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_app_detail">Notification Analyser</string>
+    <string name="app_detail_ignore">Ignore</string>
 
 </resources>

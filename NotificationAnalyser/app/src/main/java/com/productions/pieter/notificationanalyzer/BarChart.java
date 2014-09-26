@@ -7,9 +7,10 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.productions.pieter.notificationanalyzer.Models.DatabaseHelper;
+import com.productions.pieter.notificationanalyzer.Models.NotificationItemDao;
 
 import java.sql.SQLException;
 import java.util.Date;

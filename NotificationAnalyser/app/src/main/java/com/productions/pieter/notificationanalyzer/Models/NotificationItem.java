@@ -1,4 +1,4 @@
-package com.productions.pieter.notificationanalyzer;
+package com.productions.pieter.notificationanalyzer.Models;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -6,20 +6,22 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.Date;
 
 /**
+ * The 'Notifications' table.
+ *
  * Created by pieter on 21/09/14.
  */
 @DatabaseTable(tableName = "Notifications", daoClass = NotificationItemDaoImpl.class)
 public class NotificationItem {
     public static final String FIELD_TABLE_NAME = "Notifications";
-    public static final String FIELD_KEY = "Key";
-    public static final String FIELD_APPNAME = "AppName";
+    public static final String FIELD_KEY = "Id";
+    public static final String FIELD_PACKAGE_NAME = "PackageName";
     public static final String FIELD_DATE = "Date";
 
 
     @DatabaseField(columnName = FIELD_KEY, generatedId = true)
     private Integer Key;
-    @DatabaseField(columnName = FIELD_APPNAME, canBeNull = false)
-    private String AppName;
+    @DatabaseField(columnName = FIELD_PACKAGE_NAME, canBeNull = false)
+    private String PackageName;
     @DatabaseField(columnName = FIELD_DATE, canBeNull = false)
     private Date Date;
 
@@ -27,17 +29,17 @@ public class NotificationItem {
         //ORMLite needs a no-arg constructor.
     }
 
-    public NotificationItem(String appName, Date date) {
-        this.AppName = appName;
+    public NotificationItem(String packageName, Date date) {
+        this.PackageName = packageName;
         this.Date = date;
     }
 
-    public String getAppName() {
-        return AppName;
+    public String getPackageName() {
+        return PackageName;
     }
 
-    public void setAppName(String appName) {
-        AppName = appName;
+    public void setPackageName(String packageName) {
+        PackageName = packageName;
     }
 
     public Date getDate() {
@@ -45,6 +47,6 @@ public class NotificationItem {
     }
 
     public void setDate(Date date) {
-        Date = date;
+        this.Date = date;
     }
 }

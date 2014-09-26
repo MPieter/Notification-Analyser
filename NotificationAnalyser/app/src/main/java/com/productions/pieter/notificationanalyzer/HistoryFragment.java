@@ -1,14 +1,16 @@
 package com.productions.pieter.notificationanalyzer;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.productions.pieter.notificationanalyzer.Models.DatabaseHelper;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -47,8 +49,17 @@ public class HistoryFragment extends Fragment {
             }
         });
         ListView listHistory = (ListView) view.findViewById(R.id.list_view_history);
-        listHistory.addHeaderView(viewListHeader);
+        listHistory.addHeaderView(viewListHeader, null, false);
         listHistory.setAdapter(new NotificationAdapter(view.getContext(), new LinkedList<NotificationAppView>()));
+        listHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), AppDetail.class);
+                NotificationAppView clickedApp = (NotificationAppView) adapterView.getAdapter().getItem(i);
+                intent.putExtra(Intent.EXTRA_SUBJECT, clickedApp.AppName);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 

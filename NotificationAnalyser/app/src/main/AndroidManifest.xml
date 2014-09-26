@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".Home"
+            android:name="com.productions.pieter.notificationanalyzer.Home"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +30,7 @@
         </activity>
 
         <service
-            android:name=".NotificationListener"
+            android:name="com.productions.pieter.notificationanalyzer.NotificationListener"
             android:enabled="true"
             android:exported="true"
             android:label="Notification Listener"
@@ -41,8 +41,13 @@
         </service>
 
         <activity
-            android:name=".HistoryFragment"
+            android:name="com.productions.pieter.notificationanalyzer.HistoryFragment"
             android:label="@string/title_activity_history" >
+        </activity>
+        <activity
+            android:name=".AppDetail"
+            android:label="@string/title_activity_app_detail"
+            android:parentActivityName=".Home">
         </activity>
     </application>
 

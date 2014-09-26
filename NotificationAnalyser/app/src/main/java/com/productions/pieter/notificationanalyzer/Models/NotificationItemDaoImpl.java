@@ -1,8 +1,10 @@
-package com.productions.pieter.notificationanalyzer;
+package com.productions.pieter.notificationanalyzer.Models;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.support.ConnectionSource;
+import com.productions.pieter.notificationanalyzer.NotificationAppView;
+import com.productions.pieter.notificationanalyzer.NotificationDayView;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -13,6 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * NotificationItem DAO implementation.
+ *
  * Created by pieter on 24/09/14.
  */
 public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integer> implements NotificationItemDao {
@@ -23,9 +27,13 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
     @Override
     public List<NotificationAppView> getOverviewLast24Hours() throws SQLException {
         // TODO enkel laatste 24u selecteren
-        String rawQuery = "SELECT " + NotificationItem.FIELD_APPNAME
+        String rawQuery = "SELECT " + NotificationItem.FIELD_PACKAGE_NAME
                 + ", COUNT(*) FROM " + NotificationItem.FIELD_TABLE_NAME
-                + " GROUP BY " + NotificationItem.FIELD_APPNAME;
+                + " WHERE " + NotificationItem.FIELD_PACKAGE_NAME + " IN "
+                    + " (SELECT  " + Application.FIELD_PACKAGE_NAME
+                    + " FROM " + Application.FIELD_TABLE_NAME
+                    + " WHERE " + Application.FIELD_IGNORE + " = 0)"
+                + " GROUP BY " + NotificationItem.FIELD_PACKAGE_NAME;
         return this.getOverviewGeneric(rawQuery);
     }
 
@@ -34,10 +42,14 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
         DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         String dateString = df.format(date);
 
-        String rawQuery = "SELECT " + NotificationItem.FIELD_APPNAME
+        String rawQuery = "SELECT " + NotificationItem.FIELD_PACKAGE_NAME
                 + ", COUNT(*) FROM " + NotificationItem.FIELD_TABLE_NAME
                 + " WHERE strftime('%d-%m-%Y'," + NotificationItem.FIELD_DATE + ") = '" + dateString + "'"
-                + " GROUP BY " + NotificationItem.FIELD_APPNAME;
+                    + " AND " + NotificationItem.FIELD_PACKAGE_NAME + " IN "
+                        + " (SELECT  " + Application.FIELD_PACKAGE_NAME
+                        + " FROM " + Application.FIELD_TABLE_NAME
+                        + " WHERE " + Application.FIELD_IGNORE + " = 0)"
+                + " GROUP BY " + NotificationItem.FIELD_PACKAGE_NAME;
 
         return this.getOverviewGeneric(rawQuery);
     }

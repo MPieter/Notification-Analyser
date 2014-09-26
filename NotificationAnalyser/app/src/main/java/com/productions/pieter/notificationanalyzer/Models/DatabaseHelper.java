@@ -1,10 +1,9 @@
-package com.productions.pieter.notificationanalyzer;
+package com.productions.pieter.notificationanalyzer.Models;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -19,8 +18,9 @@ import java.sql.SQLException;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "notifications.db";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 5;
 
+    private ApplicationDao applicationDao = null;
     private NotificationItemDao notificationDao = null;
 
     public DatabaseHelper(Context context) {
@@ -35,6 +35,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
         try {
             TableUtils.createTable(connectionSource, NotificationItem.class);
+            TableUtils.createTable(connectionSource, Application.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -45,10 +46,22 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         // TODO update mechanisme van de database verbeteren
         try {
             TableUtils.dropTable(connectionSource, NotificationItem.class, true);
+            TableUtils.dropTable(connectionSource, Application.class, true);
             onCreate(sqLiteDatabase, connectionSource);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Returns the Database Access Object (DAO) for Application class. It will create it or
+     * just give the cached value.
+     */
+    public ApplicationDao getApplicationDao() throws SQLException {
+        if (applicationDao == null) {
+            applicationDao = getDao(Application.class);
+        }
+        return applicationDao;
     }
 
     /**
@@ -68,6 +81,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void close() {
         super.close();
+        applicationDao = null;
         notificationDao = null;
     }
 }

@@ -1,14 +1,14 @@
 package com.productions.pieter.notificationanalyzer;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.provider.ContactsContract;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.UpdateBuilder;
+import com.productions.pieter.notificationanalyzer.Models.Application;
+import com.productions.pieter.notificationanalyzer.Models.ApplicationDao;
+import com.productions.pieter.notificationanalyzer.Models.DatabaseHelper;
+import com.productions.pieter.notificationanalyzer.Models.NotificationItem;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -38,8 +38,15 @@ public class NotificationListener extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         try {
+            String packageName = sbn.getPackageName();
+            ApplicationDao applicationDao = getDatabaseHelper().getApplicationDao();
+            if (!applicationDao.idExists(packageName)) {
+                Application application = new Application(packageName, false);
+                applicationDao.create(application);
+            }
+
             Dao<NotificationItem, Integer> dao = getDatabaseHelper().getNotificationDao();
-            NotificationItem newItem = new NotificationItem(sbn.getPackageName(), new Date(sbn.getPostTime()));
+            NotificationItem newItem = new NotificationItem(packageName, new Date(sbn.getPostTime()));
             dao.create(newItem);
         } catch (SQLException e) {
             e.printStackTrace();
