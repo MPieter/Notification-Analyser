@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.productions.pieter.notificationanalyzer.Models.DatabaseHelper;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -24,6 +26,7 @@ public class HistoryFragment extends Fragment {
     private DatabaseHelper databaseHelper = null;
     private Date currentSelectedDate = null;
     private BarChart barChart = null;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM");
 
     public DatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {
@@ -44,6 +47,9 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onBarClick(Date date) {
                 currentSelectedDate = date;
+                TextView chartDateCurrent = (TextView) getActivity().findViewById(R.id.chart_date_current);
+                chartDateCurrent.setText(dateFormat.format(date));
+
                 ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
                 try {
                     List<NotificationAppView> objects = getDatabaseHelper().getNotificationDao().getOverviewDay(date);
@@ -53,6 +59,7 @@ public class HistoryFragment extends Fragment {
                 }
             }
         });
+
         ListView listHistory = (ListView) view.findViewById(R.id.list_view_history);
         listHistory.addHeaderView(viewListHeader, null, false);
         listHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,6 +94,10 @@ public class HistoryFragment extends Fragment {
             listHistory.setAdapter(new NotificationAdapter(this.getActivity(), new LinkedList<NotificationAppView>()));
         }
         barChart.update();
+        TextView chartDateStart = (TextView) this.getActivity().findViewById(R.id.chart_date_start);
+        TextView chartDateEnd = (TextView) this.getActivity().findViewById(R.id.chart_date_end);
+        chartDateStart.setText(barChart.getFirstDate() != null ? dateFormat.format(barChart.getFirstDate()) : "");
+        chartDateEnd.setText(barChart.getLastDate() != null ? dateFormat.format(barChart.getLastDate()) : "");
     }
 
     @Override

@@ -71,11 +71,11 @@ public class BarChart extends View {
         if (this.isInEditMode()) {
             maxNotifications = 25;
             this.bars = new LinkedList<Bar>();
-            bars.add(new Bar(null, new NotificationDayView(new Date(), 10)));
+            bars.add(new Bar(null, new NotificationDayView(new Date(), 25)));
             bars.add(new Bar(null, new NotificationDayView(new Date(), 15)));
             bars.add(new Bar(null, new NotificationDayView(new Date(), 25)));
             bars.add(new Bar(null, new NotificationDayView(new Date(), 18)));
-            bars.add(new Bar(null, new NotificationDayView(new Date(), 7)));
+            bars.add(new Bar(null, new NotificationDayView(new Date(), 25)));
         } else {
             this.update();
         }
@@ -112,6 +112,30 @@ public class BarChart extends View {
             e.printStackTrace();
         }
         invalidate();
+    }
+
+    /**
+     * Gets the first date that is displayed on the chart.
+     * @return
+     */
+    public Date getFirstDate() {
+        if (bars.size() > 0) {
+            return bars.get(0).ntf.Date;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Gets the last date that is displayed on the chart.
+     * @return
+     */
+    public Date getLastDate() {
+        if (bars.size() > 0) {
+            return bars.get(bars.size() - 1).ntf.Date;
+        } else {
+            return null;
+        }
     }
 
     public DatabaseHelper getDatabaseHelper() {
