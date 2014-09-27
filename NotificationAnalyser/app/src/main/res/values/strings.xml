@@ -13,5 +13,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_app_detail">Notification Analyser</string>
     <string name="app_detail_ignore">Ignore</string>
+    <string name="NotificationAccessDialogFragment_Confirm">OK</string>
+    <string name="NotificationAccessDialogFragment_Cancel">Cancel</string>
+    <string name="NotificationAccessDialogFragment_Message">
+        This application needs notification access in order to function correct. Currently this is not enabled. Do you want to enable this now?
+    </string>
+    <string name="NotificationAccessDialogFragment_Title">Notification access</string>
 
 </resources>

@@ -2,14 +2,17 @@ package com.productions.pieter.notificationanalyzer;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
-public class Home extends Activity {
+public class Home extends Activity implements NotificationAccessDialogFragment.NotificationAccessDialogFragmentListener {
     HomePagerAdapter homePagerAdapter;
     ViewPager mViewPager;
 
@@ -55,6 +58,11 @@ public class Home extends Activity {
 
         actionBar.addTab(tabOverview);
         actionBar.addTab(tabHistory);
+
+        if (NotificationListener.isNotificationAccessEnabled == false) {
+            DialogFragment dialog = new NotificationAccessDialogFragment();
+            dialog.show(getFragmentManager(), "notificationAccessDialog");
+        }
     }
 
 
@@ -75,5 +83,20 @@ public class Home extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Something went wrong. Enable manually", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        // Do nothing
     }
 }

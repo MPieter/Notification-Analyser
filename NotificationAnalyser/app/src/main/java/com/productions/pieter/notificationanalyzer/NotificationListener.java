@@ -1,5 +1,7 @@
 package com.productions.pieter.notificationanalyzer;
 
+import android.content.Intent;
+import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
@@ -14,6 +16,8 @@ import java.sql.SQLException;
 import java.util.Date;
 
 public class NotificationListener extends NotificationListenerService {
+    public static boolean isNotificationAccessEnabled = false;
+
     private DatabaseHelper databaseHelper = null;
 
     public NotificationListener() {
@@ -56,5 +60,19 @@ public class NotificationListener extends NotificationListenerService {
     @Override
     public void onNotificationRemoved(StatusBarNotification statusBarNotification) {
         // Do nothing for the moment
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        IBinder binder = super.onBind(intent);
+        isNotificationAccessEnabled = true;
+        return binder;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        boolean onUnbind = super.onUnbind(intent);
+        isNotificationAccessEnabled = false;
+        return onUnbind;
     }
 }
