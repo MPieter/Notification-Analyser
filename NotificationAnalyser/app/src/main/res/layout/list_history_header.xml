@@ -10,11 +10,15 @@
     android:paddingBottom="@dimen/list_padding_top">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/list_padding_top"
+        android:layout_marginBottom="@dimen/list_padding_top">
         <TextView
             android:id="@+id/chart_date_current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/textview_balloon"
+            android:textColor="@android:color/black"
             android:text="5 Jan"/>
         </LinearLayout>
 

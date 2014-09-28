@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import java.util.List;
 public class HistoryFragment extends Fragment {
     private DatabaseHelper databaseHelper = null;
     private Date currentSelectedDate = null;
+    private int currentSelectedBarPosition = -1;
     private BarChart barChart = null;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM");
 
@@ -45,10 +47,17 @@ public class HistoryFragment extends Fragment {
         barChart = (BarChart) viewListHeader.findViewById(R.id.bar_chart);
         barChart.setBarChartListener(new BarChartListener() {
             @Override
-            public void onBarClick(Date date) {
+            public void onBarClick(Date date, int position) {
                 currentSelectedDate = date;
+                currentSelectedBarPosition = position;
                 TextView chartDateCurrent = (TextView) getActivity().findViewById(R.id.chart_date_current);
                 chartDateCurrent.setText(dateFormat.format(date));
+                chartDateCurrent.setVisibility(View.VISIBLE);
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) chartDateCurrent.getLayoutParams();
+                layoutParams.setMargins(getResources().getDimensionPixelOffset(R.dimen.bar_chart_width_bar) * position,
+                        0, 0, 0);
+                chartDateCurrent.setLayoutParams(layoutParams);
+
 
                 ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
                 try {
@@ -90,8 +99,18 @@ public class HistoryFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
+            TextView chartDateCurrent = (TextView) getActivity().findViewById(R.id.chart_date_current);
+            chartDateCurrent.setText(dateFormat.format(currentSelectedDate));
+            chartDateCurrent.setVisibility(View.VISIBLE);
+            chartDateCurrent.setPadding(getResources().getDimensionPixelOffset(R.dimen.bar_chart_width_bar) * currentSelectedBarPosition,
+                    chartDateCurrent.getPaddingTop(),
+                    chartDateCurrent.getPaddingRight(),
+                    chartDateCurrent.getPaddingBottom());
         } else {
             listHistory.setAdapter(new NotificationAdapter(this.getActivity(), new LinkedList<NotificationAppView>()));
+            TextView chartDateCurrent = (TextView) getActivity().findViewById(R.id.chart_date_current);
+            chartDateCurrent.setVisibility(View.INVISIBLE);
+
         }
         barChart.update();
         TextView chartDateStart = (TextView) this.getActivity().findViewById(R.id.chart_date_start);

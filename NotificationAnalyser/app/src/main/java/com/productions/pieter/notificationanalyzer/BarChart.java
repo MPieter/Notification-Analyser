@@ -183,7 +183,7 @@ public class BarChart extends View {
                     }
 
                     bars.get(i).isActive = true;
-                    barChartListener.onBarClick(bars.get(i).ntf.Date);
+                    barChartListener.onBarClick(bars.get(i).ntf.Date, i);
                     this.currentSelectedDate = bars.get(i).ntf.Date;
                     break;
                 }
