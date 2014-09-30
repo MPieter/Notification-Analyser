@@ -29,6 +29,7 @@ public class HistoryFragment extends Fragment {
     private int currentSelectedBarPosition = -1;
     private BarChart barChart = null;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM");
+    private View headerDayCount = null;
 
     public DatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {
@@ -65,6 +66,14 @@ public class HistoryFragment extends Fragment {
                 try {
                     List<NotificationAppView> objects = getDatabaseHelper().getNotificationDao().getOverviewDay(date);
                     listView.setAdapter(new NotificationAdapter(getActivity(), objects));
+
+                    int totalCount = 0;
+                    for (int i = 0; i < objects.size(); i++) {
+                        totalCount += objects.get(i).Notifications;
+                    }
+                    TextView titleCounter = (TextView) headerDayCount.findViewById(R.id.title_counter);
+                    titleCounter.setText(Integer.toString(totalCount));
+                    headerDayCount.setVisibility(View.VISIBLE);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -73,7 +82,9 @@ public class HistoryFragment extends Fragment {
 
         ListView listHistory = (ListView) view.findViewById(R.id.list_view_history);
         listHistory.addHeaderView(viewListHeader, null, false);
-        listHistory.addHeaderView(inflater.inflate(R.layout.list_header_day_count, null), null, false);
+        headerDayCount = inflater.inflate(R.layout.list_header_day_count, null);
+        headerDayCount.setVisibility(View.GONE);
+        listHistory.addHeaderView(headerDayCount, null, false);
         listHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -98,6 +109,14 @@ public class HistoryFragment extends Fragment {
                 try {
                     List<NotificationAppView> objects = getDatabaseHelper().getNotificationDao().getOverviewDay(currentSelectedDate);
                     listHistory.setAdapter(new NotificationAdapter(this.getActivity(), objects));
+
+                    int totalCount = 0;
+                    for (int i = 0; i < objects.size(); i++) {
+                        totalCount += objects.get(i).Notifications;
+                    }
+                    TextView titleCounter = (TextView) headerDayCount.findViewById(R.id.title_counter);
+                    titleCounter.setText(Integer.toString(totalCount));
+                    headerDayCount.setVisibility(View.VISIBLE);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -109,11 +128,13 @@ public class HistoryFragment extends Fragment {
             int marginLeft = getResources().getDimensionPixelOffset(R.dimen.bar_chart_width_bar) * currentSelectedBarPosition;
             layoutParams.setMargins(marginLeft, 0, 0, 0);
             chartDateCurrent.setLayoutParams(layoutParams);
+
+
         } else {
             listHistory.setAdapter(new NotificationAdapter(this.getActivity(), new LinkedList<NotificationAppView>()));
             TextView chartDateCurrent = (TextView) getActivity().findViewById(R.id.chart_date_current);
             chartDateCurrent.setVisibility(View.INVISIBLE);
-
+            headerDayCount.setVisibility(View.GONE);
         }
         barChart.update();
         TextView chartDateStart = (TextView) this.getActivity().findViewById(R.id.chart_date_start);

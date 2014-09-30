@@ -159,7 +159,7 @@ public class BarChart extends View {
         for (int i = 0; i < bars.size(); i++) {
             if (bars.get(i).rect == null) {
                 Bar bar = bars.get(i);
-                int height = (int) ((float) bar.ntf.Notifications / (float) maxNotifications * canvas.getHeight());
+                int height = (int) (((float) bar.ntf.Notifications / (float) maxNotifications) * canvas.getHeight());
                 bars.get(i).rect = new Rect(bar_width * i, canvas.getHeight() - height, bar_width * (i + 1), canvas.getHeight());
             }
             canvas.drawRect(bars.get(i).rect, bars.get(i).isActive ?
@@ -171,8 +171,6 @@ public class BarChart extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
-
             // Set active state to touched
             for (int i = 0; i < bars.size(); i++) {
                 int x = Math.round(event.getX());

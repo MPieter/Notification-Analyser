@@ -7,6 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/list_header_day_count"
         android:gravity="center">
         <TextView
             android:id="@+id/title_counter"
