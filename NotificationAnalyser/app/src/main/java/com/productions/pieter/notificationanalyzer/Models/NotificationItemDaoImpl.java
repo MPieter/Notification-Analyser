@@ -70,6 +70,10 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
         GenericRawResults<String[]> rawResults = this.queryRaw(
                 "SELECT " + NotificationItem.FIELD_DATE
                         + ", COUNT(*) FROM " + NotificationItem.FIELD_TABLE_NAME
+                        + " WHERE " + NotificationItem.FIELD_PACKAGE_NAME + " IN "
+                            + " (SELECT  " + Application.FIELD_PACKAGE_NAME
+                            + " FROM " + Application.FIELD_TABLE_NAME
+                            + " WHERE " + Application.FIELD_IGNORE + " = 0)"
                         + " GROUP BY strftime('%d-%m-%Y', " + NotificationItem.FIELD_DATE + ")");
         List<String[]> results = rawResults.getResults();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
