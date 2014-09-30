@@ -41,6 +41,19 @@ public class NotificationListener extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
+        if (sbn.isOngoing() == false) {
+            storeNotification(sbn);
+        }
+    }
+
+    @Override
+    public void onNotificationRemoved(StatusBarNotification sbn) {
+        if (sbn.isOngoing() == true) {
+            storeNotification(sbn);
+        }
+    }
+
+    private void storeNotification(StatusBarNotification sbn) {
         try {
             String packageName = sbn.getPackageName();
             ApplicationDao applicationDao = getDatabaseHelper().getApplicationDao();
@@ -55,11 +68,6 @@ public class NotificationListener extends NotificationListenerService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onNotificationRemoved(StatusBarNotification statusBarNotification) {
-        // Do nothing for the moment
     }
 
     @Override
