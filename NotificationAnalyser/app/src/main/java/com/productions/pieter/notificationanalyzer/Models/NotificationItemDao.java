@@ -14,7 +14,7 @@ import java.util.List;
  * Created by pieter on 24/09/14.
  */
 public interface NotificationItemDao extends Dao<NotificationItem, Integer> {
-    public List<NotificationAppView> getOverviewLast24Hours() throws SQLException;
+    public List<NotificationAppView> getOverviewToday() throws SQLException;
 
     public List<NotificationAppView> getOverviewDay(Date date) throws SQLException;
 

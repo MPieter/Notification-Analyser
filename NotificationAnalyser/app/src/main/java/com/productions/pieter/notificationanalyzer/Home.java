@@ -53,8 +53,8 @@ public class Home extends Activity implements NotificationAccessDialogFragment.N
                 // User selected the already selected tab. In this case do nothing.
             }
         };
-        ActionBar.Tab tabOverview = actionBar.newTab().setText("Overview").setTabListener(tabListener);
-        ActionBar.Tab tabHistory = actionBar.newTab().setText("History").setTabListener(tabListener);
+        ActionBar.Tab tabOverview = actionBar.newTab().setText(getResources().getString(R.string.title_fragment_today)).setTabListener(tabListener);
+        ActionBar.Tab tabHistory = actionBar.newTab().setText(getResources().getString(R.string.title_fragment_history)).setTabListener(tabListener);
 
         actionBar.addTab(tabOverview);
         actionBar.addTab(tabHistory);

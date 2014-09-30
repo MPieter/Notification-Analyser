@@ -38,7 +38,7 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
-        View viewHeader = inflater.inflate(R.layout.list_header, null);
+        View viewHeader = inflater.inflate(R.layout.list_header_day_count, null);
 
         ListView listView = (ListView) view.findViewById(R.id.list_view);
         listView.addHeaderView(viewHeader, null, false);
@@ -60,7 +60,7 @@ public class OverviewFragment extends Fragment {
         List<NotificationAppView> list = new LinkedList<NotificationAppView>();
         try {
             NotificationItemDao dao = getDatabaseHelper().getNotificationDao();
-            list = dao.getOverviewLast24Hours();
+            list = dao.getOverviewToday();
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -43,7 +43,7 @@ public class HistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        View viewListHeader = inflater.inflate(R.layout.list_history_header, null);
+        View viewListHeader = inflater.inflate(R.layout.list_header_chart, null);
         barChart = (BarChart) viewListHeader.findViewById(R.id.bar_chart);
         barChart.setBarChartListener(new BarChartListener() {
             @Override
@@ -73,6 +73,7 @@ public class HistoryFragment extends Fragment {
 
         ListView listHistory = (ListView) view.findViewById(R.id.list_view_history);
         listHistory.addHeaderView(viewListHeader, null, false);
+        listHistory.addHeaderView(inflater.inflate(R.layout.list_header_day_count, null), null, false);
         listHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

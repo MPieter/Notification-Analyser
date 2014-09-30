@@ -35,10 +35,6 @@
         </service>
 
         <activity
-            android:name="com.productions.pieter.notificationanalyzer.HistoryFragment"
-            android:label="@string/title_activity_history" >
-        </activity>
-        <activity
             android:name=".AppDetail"
             android:label="@string/title_activity_app_detail"
             android:parentActivityName=".Home">

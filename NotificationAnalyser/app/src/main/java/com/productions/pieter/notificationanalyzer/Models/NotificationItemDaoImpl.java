@@ -25,16 +25,8 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
     }
 
     @Override
-    public List<NotificationAppView> getOverviewLast24Hours() throws SQLException {
-        // TODO enkel laatste 24u selecteren
-        String rawQuery = "SELECT " + NotificationItem.FIELD_PACKAGE_NAME
-                + ", COUNT(*) FROM " + NotificationItem.FIELD_TABLE_NAME
-                + " WHERE " + NotificationItem.FIELD_PACKAGE_NAME + " IN "
-                    + " (SELECT  " + Application.FIELD_PACKAGE_NAME
-                    + " FROM " + Application.FIELD_TABLE_NAME
-                    + " WHERE " + Application.FIELD_IGNORE + " = 0)"
-                + " GROUP BY " + NotificationItem.FIELD_PACKAGE_NAME;
-        return this.getOverviewGeneric(rawQuery);
+    public List<NotificationAppView> getOverviewToday() throws SQLException {
+        return this.getOverviewDay(new Date());
     }
 
     @Override
