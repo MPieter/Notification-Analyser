@@ -78,6 +78,14 @@ public class HistoryFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onIntervalChanged(Date first, Date end) {
+                TextView chartDateStart = (TextView) getActivity().findViewById(R.id.chart_date_start);
+                TextView chartDateEnd = (TextView) getActivity().findViewById(R.id.chart_date_end);
+                chartDateStart.setText(first != null ? dateFormat.format(first) : "");
+                chartDateEnd.setText(end != null ? dateFormat.format(end) : "");
+            }
         });
 
         ListView listHistory = (ListView) view.findViewById(R.id.list_view_history);
@@ -137,10 +145,6 @@ public class HistoryFragment extends Fragment {
             headerDayCount.setVisibility(View.GONE);
         }
         barChart.update();
-        TextView chartDateStart = (TextView) this.getActivity().findViewById(R.id.chart_date_start);
-        TextView chartDateEnd = (TextView) this.getActivity().findViewById(R.id.chart_date_end);
-        chartDateStart.setText(barChart.getFirstDate() != null ? dateFormat.format(barChart.getFirstDate()) : "");
-        chartDateEnd.setText(barChart.getLastDate() != null ? dateFormat.format(barChart.getLastDate()) : "");
     }
 
     @Override

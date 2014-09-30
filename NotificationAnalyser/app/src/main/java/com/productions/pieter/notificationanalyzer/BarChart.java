@@ -34,6 +34,7 @@ public class BarChart extends View {
     private Paint paintBarSelected = new Paint();
     private BarChartListener barChartListener;
     private Date currentSelectedDate = null;
+    private boolean staleData = false;
 
     public BarChart(Context context) {
         super(context);
@@ -87,10 +88,15 @@ public class BarChart extends View {
      */
     public void update() {
         // TODO er moet getest worden dat de chart wel degelijk geupdate wordt bij een resume life cycle event
+        staleData = true;
+        invalidate();
+    }
+
+    private void fetchData(int days) {
         try {
             this.bars = new LinkedList<Bar>();
             NotificationItemDao dao = getDatabaseHelper().getNotificationDao();
-            List<NotificationDayView> list = dao.getSummaryLastDays();
+            List<NotificationDayView> list = dao.getSummaryLastDays(days);
             for (NotificationDayView nf : list) {
                 maxNotifications = nf.Notifications > maxNotifications ? nf.Notifications : maxNotifications;
             }
@@ -108,34 +114,13 @@ public class BarChart extends View {
                     bars.add(new Bar(null, nf));
                 }
             }
+            staleData = false;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        invalidate();
-    }
-
-    /**
-     * Gets the first date that is displayed on the chart.
-     * @return
-     */
-    public Date getFirstDate() {
-        if (bars.size() > 0) {
-            return bars.get(0).ntf.Date;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Gets the last date that is displayed on the chart.
-     * @return
-     */
-    public Date getLastDate() {
-        if (bars.size() > 0) {
-            return bars.get(bars.size() - 1).ntf.Date;
-        } else {
-            return null;
-        }
+        Date intervalStart = bars.size() > 0 ? bars.get(0).ntf.Date : null;
+        Date intervalEnd = bars.size() > 0 ? bars.get(bars.size() - 1).ntf.Date : null;
+        barChartListener.onIntervalChanged(intervalStart, intervalEnd);
     }
 
     public DatabaseHelper getDatabaseHelper() {
@@ -156,6 +141,10 @@ public class BarChart extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int bar_width = (int) getResources().getDimension(R.dimen.bar_chart_width_bar);
+        int daysDisplayed = (int)Math.floor((double)canvas.getWidth() / (double)bar_width);
+        if (bars == null || bars.size() != daysDisplayed || staleData) {
+            fetchData(daysDisplayed);
+        }
         for (int i = 0; i < bars.size(); i++) {
             if (bars.get(i).rect == null) {
                 Bar bar = bars.get(i);

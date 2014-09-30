@@ -18,5 +18,11 @@ public interface NotificationItemDao extends Dao<NotificationItem, Integer> {
 
     public List<NotificationAppView> getOverviewDay(Date date) throws SQLException;
 
-    public List<NotificationDayView> getSummaryLastDays() throws SQLException;
+    /**
+     *
+     * @param days The number of previous days to fetch (counting backwards, starting from today).
+     * @return An ordered ascending list on the date.
+     * @throws SQLException
+     */
+    public List<NotificationDayView> getSummaryLastDays(int days) throws SQLException;
 }

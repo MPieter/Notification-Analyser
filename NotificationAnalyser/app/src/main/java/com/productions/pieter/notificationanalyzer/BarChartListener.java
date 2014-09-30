@@ -7,4 +7,5 @@ import java.util.Date;
  */
 public interface BarChartListener {
     public void onBarClick(Date date, int position);
+    public void onIntervalChanged(Date first, Date end);
 }

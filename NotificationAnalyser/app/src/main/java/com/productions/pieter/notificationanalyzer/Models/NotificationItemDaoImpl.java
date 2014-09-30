@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
     }
 
     @Override
-    public List<NotificationDayView> getSummaryLastDays() throws SQLException {
+    public List<NotificationDayView> getSummaryLastDays(int days) throws SQLException {
         LinkedList<NotificationDayView> list = new LinkedList<NotificationDayView>();
         GenericRawResults<String[]> rawResults = this.queryRaw(
                 "SELECT " + NotificationItem.FIELD_DATE
@@ -74,7 +75,9 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
                             + " (SELECT  " + Application.FIELD_PACKAGE_NAME
                             + " FROM " + Application.FIELD_TABLE_NAME
                             + " WHERE " + Application.FIELD_IGNORE + " = 0)"
-                        + " GROUP BY strftime('%d-%m-%Y', " + NotificationItem.FIELD_DATE + ")");
+                        + " GROUP BY strftime('%d-%m-%Y', " + NotificationItem.FIELD_DATE + ")"
+                        + " ORDER BY datetime(" + NotificationItem.FIELD_DATE + ") DESC "
+                        + " LIMIT " + days);
         List<String[]> results = rawResults.getResults();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
         for (int i = 0; i < results.size(); i++) {
@@ -87,7 +90,7 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
             }
 
         }
-
+        Collections.reverse(list);
         return list;
     }
 }
