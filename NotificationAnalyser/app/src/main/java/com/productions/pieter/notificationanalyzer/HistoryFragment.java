@@ -54,8 +54,10 @@ public class HistoryFragment extends Fragment {
                 chartDateCurrent.setText(dateFormat.format(date));
                 chartDateCurrent.setVisibility(View.VISIBLE);
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) chartDateCurrent.getLayoutParams();
-                layoutParams.setMargins(getResources().getDimensionPixelOffset(R.dimen.bar_chart_width_bar) * position,
-                        0, 0, 0);
+                int marginLeft = getResources().getDimensionPixelOffset(R.dimen.bar_chart_width_bar) * position
+                        + getResources().getDimensionPixelOffset(R.dimen.bar_chart_width_bar) / 2 - chartDateCurrent.getWidth() / 2
+                        + getResources().getDimensionPixelOffset(R.dimen.barchart_marginSides);
+                layoutParams.setMargins(marginLeft, 0, 0, 0);
                 chartDateCurrent.setLayoutParams(layoutParams);
 
 
@@ -102,10 +104,10 @@ public class HistoryFragment extends Fragment {
             TextView chartDateCurrent = (TextView) getActivity().findViewById(R.id.chart_date_current);
             chartDateCurrent.setText(dateFormat.format(currentSelectedDate));
             chartDateCurrent.setVisibility(View.VISIBLE);
-            chartDateCurrent.setPadding(getResources().getDimensionPixelOffset(R.dimen.bar_chart_width_bar) * currentSelectedBarPosition,
-                    chartDateCurrent.getPaddingTop(),
-                    chartDateCurrent.getPaddingRight(),
-                    chartDateCurrent.getPaddingBottom());
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) chartDateCurrent.getLayoutParams();
+            int marginLeft = getResources().getDimensionPixelOffset(R.dimen.bar_chart_width_bar) * currentSelectedBarPosition;
+            layoutParams.setMargins(marginLeft, 0, 0, 0);
+            chartDateCurrent.setLayoutParams(layoutParams);
         } else {
             listHistory.setAdapter(new NotificationAdapter(this.getActivity(), new LinkedList<NotificationAppView>()));
             TextView chartDateCurrent = (TextView) getActivity().findViewById(R.id.chart_date_current);
