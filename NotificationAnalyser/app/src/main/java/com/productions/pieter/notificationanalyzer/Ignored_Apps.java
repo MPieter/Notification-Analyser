@@ -42,17 +42,20 @@ public class Ignored_Apps extends Activity {
         setContentView(R.layout.activity_ignored_apps);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         listView = (EnhancedListView) findViewById(R.id.list_ignored_apps);
+        View listViewHeader = inflater.inflate(R.layout.list_ignored_apps_header, null);
         try {
             List<Application> applicationList = getDatabaseHelper().getApplicationDao().getIgnoredApps();
             ignoredAppsAdapter = new ApplicationIgnoreAdapter(this, applicationList);
             listView.setAdapter(ignoredAppsAdapter);
+            listView.addHeaderView(listViewHeader, null, false);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         if (ignoredAppsAdapter.getCount() == 0) {
-            TextView ignoredAppsDescription = (TextView) findViewById(R.id.ignored_apps_description);
+            TextView ignoredAppsDescription = (TextView) listViewHeader.findViewById(R.id.ignored_apps_description);
             ignoredAppsDescription.setText(R.string.ignored_apps_no_items);
         }
 
