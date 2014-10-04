@@ -11,7 +11,7 @@
         android:layout_width="@dimen/app_icon_width"
         android:layout_height="@dimen/app_icon_height"
         android:src="@drawable/ic_launcher"
-        android:layout_margin="5dp"/>
+        android:layout_margin="@dimen/app_icon_margin"/>
 
     <TextView
         android:id="@+id/app_name"

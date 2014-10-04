@@ -1,5 +1,11 @@
 apply plugin: 'android'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
 android {
     compileSdkVersion 20
     buildToolsVersion "20.0.0"
@@ -24,4 +30,5 @@ dependencies {
     compile 'com.android.support:support-v4:20.0.+'
     compile 'com.android.support:support-v13:20.0.+'
     compile files('libs/ormlite-android-4.48.jar')
+    compile 'de.timroes.android:EnhancedListView:0.3.4'
 }

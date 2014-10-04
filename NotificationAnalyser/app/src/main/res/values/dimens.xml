@@ -15,4 +15,5 @@
     <dimen name="list_padding_right">10dp</dimen>
     <dimen name="textSize_subtitle">25sp</dimen>
     <dimen name="barchart_marginSides">11dp</dimen>
+    <dimen name="app_icon_margin">5dp</dimen>
 </resources>
