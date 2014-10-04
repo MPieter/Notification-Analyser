@@ -1,4 +1,4 @@
-package com.productions.pieter.notificationanalyzer.Models;
+package com.tierep.notificationanalyser.Models;
 
 import com.j256.ormlite.dao.Dao;
 

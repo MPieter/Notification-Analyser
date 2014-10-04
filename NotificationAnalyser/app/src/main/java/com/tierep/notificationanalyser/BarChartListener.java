@@ -1,4 +1,4 @@
-package com.productions.pieter.notificationanalyzer;
+package com.tierep.notificationanalyser;
 
 import java.util.Date;
 

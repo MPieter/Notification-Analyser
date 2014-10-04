@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.productions.pieter.notificationanalyzer" >
+    package="com.tierep.notificationanalyser" >
 
     <uses-sdk
         android:minSdkVersion="18"
@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.productions.pieter.notificationanalyzer.Home"
+            android:name="com.tierep.notificationanalyser.Home"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,10 +24,10 @@
         </activity>
 
         <service
-            android:name="com.productions.pieter.notificationanalyzer.NotificationListener"
+            android:name="com.tierep.notificationanalyser.NotificationListener"
             android:enabled="true"
             android:exported="true"
-            android:label="Notification Listener"
+            android:label="@string/app_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
@@ -35,14 +35,14 @@
         </service>
 
         <activity
-            android:name="com.productions.pieter.notificationanalyzer.AppDetail"
+            android:name="com.tierep.notificationanalyser.AppDetail"
             android:label="@string/title_activity_app_detail"
-            android:parentActivityName="com.productions.pieter.notificationanalyzer.Home" >
+            android:parentActivityName="com.tierep.notificationanalyser.Home" >
         </activity>
         <activity
-            android:name="com.productions.pieter.notificationanalyzer.Ignored_Apps"
+            android:name="com.tierep.notificationanalyser.Ignored_Apps"
             android:label="@string/title_activity_ignored__apps"
-            android:parentActivityName="com.productions.pieter.notificationanalyzer.Home" >
+            android:parentActivityName="com.tierep.notificationanalyser.Home" >
         </activity>
     </application>
 

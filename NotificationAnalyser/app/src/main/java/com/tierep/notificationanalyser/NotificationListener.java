@@ -1,4 +1,4 @@
-package com.productions.pieter.notificationanalyzer;
+package com.tierep.notificationanalyser;
 
 import android.content.Intent;
 import android.os.IBinder;
@@ -7,10 +7,10 @@ import android.service.notification.StatusBarNotification;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.productions.pieter.notificationanalyzer.Models.Application;
-import com.productions.pieter.notificationanalyzer.Models.ApplicationDao;
-import com.productions.pieter.notificationanalyzer.Models.DatabaseHelper;
-import com.productions.pieter.notificationanalyzer.Models.NotificationItem;
+import com.tierep.notificationanalyser.Models.Application;
+import com.tierep.notificationanalyser.Models.ApplicationDao;
+import com.tierep.notificationanalyser.Models.DatabaseHelper;
+import com.tierep.notificationanalyser.Models.NotificationItem;
 
 import java.sql.SQLException;
 import java.util.Date;

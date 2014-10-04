@@ -1,4 +1,4 @@
-package com.productions.pieter.notificationanalyzer;
+package com.tierep.notificationanalyser;
 
 import android.app.Fragment;
 import android.app.FragmentManager;

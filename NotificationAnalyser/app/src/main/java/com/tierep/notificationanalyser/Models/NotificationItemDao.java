@@ -1,8 +1,8 @@
-package com.productions.pieter.notificationanalyzer.Models;
+package com.tierep.notificationanalyser.Models;
 
 import com.j256.ormlite.dao.Dao;
-import com.productions.pieter.notificationanalyzer.NotificationAppView;
-import com.productions.pieter.notificationanalyzer.NotificationDayView;
+import com.tierep.notificationanalyser.NotificationAppView;
+import com.tierep.notificationanalyser.NotificationDayView;
 
 import java.sql.SQLException;
 import java.util.Date;

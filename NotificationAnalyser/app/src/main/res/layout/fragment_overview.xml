@@ -3,7 +3,7 @@
     android:id="@+id/fragment_overview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.productions.pieter.notificationanalyzer.OverviewFragment">
+    tools:context="com.tierep.notificationanalyser.OverviewFragment">
 
     <ListView
         android:id="@+id/list_view"

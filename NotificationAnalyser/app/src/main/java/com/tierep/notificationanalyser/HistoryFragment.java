@@ -1,4 +1,4 @@
-package com.productions.pieter.notificationanalyzer;
+package com.tierep.notificationanalyser;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.productions.pieter.notificationanalyzer.Models.DatabaseHelper;
+import com.tierep.notificationanalyser.Models.DatabaseHelper;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;

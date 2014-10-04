@@ -1,4 +1,4 @@
-package com.productions.pieter.notificationanalyzer;
+package com.tierep.notificationanalyser;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,8 +9,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.productions.pieter.notificationanalyzer.Models.DatabaseHelper;
-import com.productions.pieter.notificationanalyzer.Models.NotificationItemDao;
+import com.tierep.notificationanalyser.Models.DatabaseHelper;
+import com.tierep.notificationanalyser.Models.NotificationItemDao;
 
 import java.sql.SQLException;
 import java.util.Calendar;

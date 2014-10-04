@@ -23,7 +23,7 @@
             android:text="5 Jan"/>
         </LinearLayout>
 
-    <com.productions.pieter.notificationanalyzer.BarChart
+    <com.tierep.notificationanalyser.BarChart
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/bar_chart"
         android:layout_width="match_parent"
