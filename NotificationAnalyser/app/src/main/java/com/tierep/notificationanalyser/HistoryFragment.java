@@ -16,9 +16,7 @@ import com.tierep.notificationanalyser.Models.DatabaseHelper;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -103,12 +101,7 @@ public class HistoryFragment extends Fragment {
         super.onResume();
         ListView listHistory = (ListView) this.getActivity().findViewById(R.id.list_view_history);
         if (currentSelectedDate != null) {
-            Calendar calSelected = new GregorianCalendar();
-            calSelected.setTime(currentSelectedDate);
-            Calendar calToday = Calendar.getInstance();
-            if (calSelected.get(Calendar.DATE) == calToday.get(Calendar.DATE)) {
-                showDayListView(currentSelectedDate);
-            }
+            showDayListView(currentSelectedDate);
             showDayLabelChart(currentSelectedDate, currentSelectedBarPosition);
         } else {
             listHistory.setAdapter(new NotificationAdapter(this.getActivity(), new LinkedList<NotificationAppView>()));
