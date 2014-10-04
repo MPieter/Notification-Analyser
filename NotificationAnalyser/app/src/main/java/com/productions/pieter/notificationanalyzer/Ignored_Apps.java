@@ -42,21 +42,14 @@ public class Ignored_Apps extends Activity {
         setContentView(R.layout.activity_ignored_apps);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         listView = (EnhancedListView) findViewById(R.id.list_ignored_apps);
-        View listViewHeader = inflater.inflate(R.layout.list_ignored_apps_header, null);
         try {
             List<Application> applicationList = getDatabaseHelper().getApplicationDao().getIgnoredApps();
+            applicationList.add(0, new Application()); // Insert empty element for header
             ignoredAppsAdapter = new ApplicationIgnoreAdapter(this, applicationList);
             listView.setAdapter(ignoredAppsAdapter);
-            listView.addHeaderView(listViewHeader, null, false);
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-
-        if (ignoredAppsAdapter.getCount() == 0) {
-            TextView ignoredAppsDescription = (TextView) listViewHeader.findViewById(R.id.ignored_apps_description);
-            ignoredAppsDescription.setText(R.string.ignored_apps_no_items);
         }
 
         listView.setDismissCallback(new EnhancedListView.OnDismissCallback() {
@@ -109,36 +102,48 @@ public class Ignored_Apps extends Activity {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.list_ignored_apps_el, null);
-            TextView appName = (TextView) view.findViewById(R.id.ignored_app_name);
-            ImageView appImage = (ImageView) view.findViewById(R.id.ignored_app_image);
+            if (position == 0) {
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View listViewHeader = inflater.inflate(R.layout.list_ignored_apps_header, null);
 
-            Application app = this.getItem(position);
-            PackageManager packageManager = getContext().getPackageManager();
-            String str_appName = null;
-            Drawable icon = null;
-
-            try {
-                ApplicationInfo appInfo = packageManager.getApplicationInfo(app.getPackageName(), 0);
-                str_appName = packageManager.getApplicationLabel(appInfo).toString();
-                icon = packageManager.getApplicationIcon(appInfo);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            if (str_appName != null) appName.setText(str_appName);
-            else appName.setText(app.getPackageName());
-            if (icon != null) appImage.setImageDrawable(icon);
-
-            view.findViewById(R.id.ignored_app_delete).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listView.delete(position);
+                if (ignoredAppsAdapter.getCount() == 1) {
+                    TextView ignoredAppsDescription = (TextView) listViewHeader.findViewById(R.id.ignored_apps_description);
+                    ignoredAppsDescription.setText(R.string.ignored_apps_no_items);
                 }
-            });
 
-            return view;
+                return listViewHeader;
+            } else {
+                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View view = inflater.inflate(R.layout.list_ignored_apps_el, null);
+                TextView appName = (TextView) view.findViewById(R.id.ignored_app_name);
+                ImageView appImage = (ImageView) view.findViewById(R.id.ignored_app_image);
+
+                Application app = this.getItem(position);
+                PackageManager packageManager = getContext().getPackageManager();
+                String str_appName = null;
+                Drawable icon = null;
+
+                try {
+                    ApplicationInfo appInfo = packageManager.getApplicationInfo(app.getPackageName(), 0);
+                    str_appName = packageManager.getApplicationLabel(appInfo).toString();
+                    icon = packageManager.getApplicationIcon(appInfo);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                if (str_appName != null) appName.setText(str_appName);
+                else appName.setText(app.getPackageName());
+                if (icon != null) appImage.setImageDrawable(icon);
+
+                view.findViewById(R.id.ignored_app_delete).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listView.delete(position);
+                    }
+                });
+
+                return view;
+            }
         }
 
         @Override
