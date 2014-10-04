@@ -72,6 +72,12 @@ public class OverviewFragment extends Fragment {
 
         TextView titleCounter = (TextView) this.getActivity().findViewById(R.id.title_counter);
         titleCounter.setText(Integer.toString(totalCount));
+        TextView titleCounterSuffix = (TextView) this.getActivity().findViewById(R.id.title_counter_suffix);
+        if (totalCount == 1) {
+            titleCounterSuffix.setText(R.string.title_counter_suffix_single);
+        } else {
+            titleCounterSuffix.setText(R.string.title_counter_suffix_plural);
+        }
 
         NotificationAdapter adapter = new NotificationAdapter(this.getActivity(), list);
 

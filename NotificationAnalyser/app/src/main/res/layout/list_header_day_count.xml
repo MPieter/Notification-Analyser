@@ -17,7 +17,7 @@
             android:textSize="@dimen/textSizeCounter"/>
         <TextView
             android:id="@+id/title_counter_suffix"
-            android:text="@string/title_counter_suffix"
+            android:text="@string/title_counter_suffix_plural"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/title_counter"

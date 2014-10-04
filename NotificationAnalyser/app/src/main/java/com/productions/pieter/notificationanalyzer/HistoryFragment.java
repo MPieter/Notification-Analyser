@@ -73,6 +73,12 @@ public class HistoryFragment extends Fragment {
                     }
                     TextView titleCounter = (TextView) headerDayCount.findViewById(R.id.title_counter);
                     titleCounter.setText(Integer.toString(totalCount));
+                    TextView titleCounterSuffix = (TextView) headerDayCount.findViewById(R.id.title_counter_suffix);
+                    if (totalCount == 1) {
+                        titleCounterSuffix.setText(R.string.title_counter_suffix_single);
+                    } else {
+                        titleCounterSuffix.setText(R.string.title_counter_suffix_plural);
+                    }
                     headerDayCount.setVisibility(View.VISIBLE);
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -124,6 +130,12 @@ public class HistoryFragment extends Fragment {
                     }
                     TextView titleCounter = (TextView) headerDayCount.findViewById(R.id.title_counter);
                     titleCounter.setText(Integer.toString(totalCount));
+                    TextView titleCounterSuffix = (TextView) headerDayCount.findViewById(R.id.title_counter_suffix);
+                    if (totalCount == 1) {
+                        titleCounterSuffix.setText(R.string.title_counter_suffix_single);
+                    } else {
+                        titleCounterSuffix.setText(R.string.title_counter_suffix_plural);
+                    }
                     headerDayCount.setVisibility(View.VISIBLE);
                 } catch (SQLException e) {
                     e.printStackTrace();
