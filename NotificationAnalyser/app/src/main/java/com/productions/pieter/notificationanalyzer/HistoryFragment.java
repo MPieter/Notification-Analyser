@@ -92,6 +92,22 @@ public class HistoryFragment extends Fragment {
                 chartDateStart.setText(first != null ? dateFormat.format(first) : "");
                 chartDateEnd.setText(end != null ? dateFormat.format(end) : "");
             }
+
+            /**
+             * Called when the chart is finished drawing.
+             */
+            @Override
+            public void onChartDraw() {
+                ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
+                TextView textView = (TextView) getActivity().findViewById(R.id.history_empty);
+                if (barChart.isEmpty()) {
+                    listView.setVisibility(View.GONE);
+                    textView.setVisibility(View.VISIBLE);
+                } else {
+                    listView.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.GONE);
+                }
+            }
         });
 
         ListView listHistory = (ListView) view.findViewById(R.id.list_view_history);

@@ -8,5 +8,12 @@
     <ListView
         android:id="@+id/list_view_history"
         style="@style/list_view" />
+    <TextView
+        android:id="@+id/history_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/history_empty"/>
 
 </FrameLayout>

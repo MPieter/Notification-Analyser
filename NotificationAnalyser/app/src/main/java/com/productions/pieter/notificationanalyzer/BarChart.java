@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * A View responsible for drawing the notification history of the last days on a canvas
  * in the form of a bar chart.
- *
+ * <p/>
  * Created by pieter on 24/09/14.
  */
 public class BarChart extends View {
@@ -130,6 +130,16 @@ public class BarChart extends View {
         return databaseHelper;
     }
 
+    /**
+     * Returns whether there is some data to display on the chart.
+     * This method has to be used with caution, since the data is only fetched when an onDraw is called.
+     *
+     * @return False if there are no notifications to display on the chart, true otherwise.
+     */
+    public boolean isEmpty() {
+        return this.bars != null && this.bars.size() == 0;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
@@ -141,7 +151,7 @@ public class BarChart extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int bar_width = (int) getResources().getDimension(R.dimen.bar_chart_width_bar);
-        int daysDisplayed = (int)Math.floor((double)canvas.getWidth() / (double)bar_width);
+        int daysDisplayed = (int) Math.floor((double) canvas.getWidth() / (double) bar_width);
         if (bars == null || bars.size() != daysDisplayed || staleData) {
             fetchData(daysDisplayed);
         }
@@ -154,7 +164,7 @@ public class BarChart extends View {
             canvas.drawRect(bars.get(i).rect, bars.get(i).isActive ?
                     paintBarSelected : i % 2 == 0 ? paintBarZebra1 : paintBarZebra2);
         }
-
+        barChartListener.onChartDraw();
     }
 
     @Override
