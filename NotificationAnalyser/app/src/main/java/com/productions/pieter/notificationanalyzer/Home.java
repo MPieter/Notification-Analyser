@@ -63,6 +63,8 @@ public class Home extends Activity implements NotificationAccessDialogFragment.N
             DialogFragment dialog = new NotificationAccessDialogFragment();
             dialog.show(getFragmentManager(), "notificationAccessDialog");
         }
+
+        //new DemoDataGenerator(this).Generate(true);
     }
 
 
