@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.tierep.notificationanalyser.Models.Application;
 import com.tierep.notificationanalyser.Models.DatabaseHelper;
 
 import java.sql.SQLException;
@@ -67,15 +68,7 @@ public class HistoryFragment extends Fragment {
              */
             @Override
             public void onChartDraw() {
-                ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
-                TextView textView = (TextView) getActivity().findViewById(R.id.history_empty);
-                if (barChart.isEmpty()) {
-                    listView.setVisibility(View.GONE);
-                    textView.setVisibility(View.VISIBLE);
-                } else {
-                    listView.setVisibility(View.VISIBLE);
-                    textView.setVisibility(View.GONE);
-                }
+                // Do nothing
             }
         });
 
@@ -109,7 +102,20 @@ public class HistoryFragment extends Fragment {
             chartDateCurrent.setVisibility(View.INVISIBLE);
             headerDayCount.setVisibility(View.GONE);
         }
-        barChart.update();
+        try {
+            ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
+            TextView textView = (TextView) getActivity().findViewById(R.id.history_empty);
+            if (getDatabaseHelper().getApplicationDao().queryForEq(Application.FIELD_IGNORE, false).size() > 0) {
+                listView.setVisibility(View.VISIBLE);
+                textView.setVisibility(View.GONE);
+                barChart.update();
+            } else {
+                listView.setVisibility(View.GONE);
+                textView.setVisibility(View.VISIBLE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showDayListView(Date date) {
