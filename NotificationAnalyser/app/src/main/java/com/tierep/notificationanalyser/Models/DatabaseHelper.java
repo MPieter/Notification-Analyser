@@ -12,13 +12,13 @@ import java.sql.SQLException;
 /**
  * Database helper class used to manage the creation and upgrading of your database. This class also provides
  * the DAOs used by the other classes.
- *
+ * <p/>
  * Created by pieter on 21/09/14.
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "notifications.db";
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 1;
 
     private ApplicationDao applicationDao = null;
     private NotificationItemDao notificationDao = null;
@@ -42,14 +42,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int i, int i2) {
-        // TODO update mechanisme van de database verbeteren
-        try {
-            TableUtils.dropTable(connectionSource, NotificationItem.class, true);
-            TableUtils.dropTable(connectionSource, Application.class, true);
-            onCreate(sqLiteDatabase, connectionSource);
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int oldVersion, int newVersion) {
+        if (oldVersion < 2) {
+            // Do changes from version 1 to 2
+        }
+
+        if (oldVersion < 3) {
+            // Do changes from version 2 to 3
         }
     }
 
