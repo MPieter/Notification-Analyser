@@ -31,4 +31,5 @@ dependencies {
     compile 'com.android.support:support-v13:20.0.+'
     compile files('libs/ormlite-android-4.48.jar')
     compile 'de.timroes.android:EnhancedListView:0.3.4'
+    compile project(':MPChartLib')
 }

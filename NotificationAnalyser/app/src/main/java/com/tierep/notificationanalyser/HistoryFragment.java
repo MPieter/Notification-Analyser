@@ -86,6 +86,9 @@ public class HistoryFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        com.github.mikephil.charting.charts.BarChart chart = new com.github.mikephil.charting.charts.BarChart(this.getActivity());
+        listHistory.addHeaderView(chart);
         return view;
     }
 
