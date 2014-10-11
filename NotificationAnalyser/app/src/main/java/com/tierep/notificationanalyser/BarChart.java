@@ -95,8 +95,30 @@ public class BarChart extends View {
     private void fetchData(int days) {
         try {
             this.bars = new LinkedList<Bar>();
-            NotificationItemDao dao = getDatabaseHelper().getNotificationDao();
-            List<NotificationDayView> list = dao.getSummaryLastDays(days);
+            List<NotificationDayView> list;
+            if (this.isInEditMode()) {
+                Calendar cal = Calendar.getInstance();
+                list = new LinkedList<NotificationDayView>();
+                list.add(new NotificationDayView(cal.getTime(), 20));
+                cal.add(Calendar.HOUR, -24);
+                list.add(new NotificationDayView(cal.getTime(), 25));
+                cal.add(Calendar.HOUR, -24);
+                list.add(new NotificationDayView(cal.getTime(), 30));
+                cal.add(Calendar.HOUR, -24);
+                list.add(new NotificationDayView(cal.getTime(), 25));
+                cal.add(Calendar.HOUR, -24);
+                list.add(new NotificationDayView(cal.getTime(), 22));
+                cal.add(Calendar.HOUR, -24);
+                list.add(new NotificationDayView(cal.getTime(), 15));
+                cal.add(Calendar.HOUR, -24);
+                list.add(new NotificationDayView(cal.getTime(), 17));
+                cal.add(Calendar.HOUR, -24);
+                list.add(new NotificationDayView(cal.getTime(), 29));
+            } else {
+                NotificationItemDao dao = getDatabaseHelper().getNotificationDao();
+                list = dao.getSummaryLastDays(days);
+            }
+
             for (NotificationDayView nf : list) {
                 maxNotifications = nf.Notifications > maxNotifications ? nf.Notifications : maxNotifications;
             }
