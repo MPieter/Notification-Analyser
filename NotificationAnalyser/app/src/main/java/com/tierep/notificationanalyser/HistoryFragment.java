@@ -2,21 +2,26 @@ package com.tierep.notificationanalyser;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ValueFormatter;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.tierep.notificationanalyser.Models.Application;
 import com.tierep.notificationanalyser.Models.DatabaseHelper;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,9 +31,7 @@ public class HistoryFragment extends Fragment {
     private DatabaseHelper databaseHelper = null;
     private Date currentSelectedDate = null;
     private int currentSelectedBarPosition = -1;
-    private BarChart barChart = null;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM");
-    private View headerDayCount = null;
 
     public DatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {
@@ -43,40 +46,7 @@ public class HistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        View viewListHeader = inflater.inflate(R.layout.list_header_chart, null);
-        barChart = (BarChart) viewListHeader.findViewById(R.id.bar_chart);
-        barChart.setBarChartListener(new BarChartListener() {
-            @Override
-            public void onBarClick(Date date, int position) {
-                currentSelectedDate = date;
-                currentSelectedBarPosition = position;
-
-                showDayLabelChart(date, position);
-                showDayListView(date);
-            }
-
-            @Override
-            public void onIntervalChanged(Date first, Date end) {
-                TextView chartDateStart = (TextView) getActivity().findViewById(R.id.chart_date_start);
-                TextView chartDateEnd = (TextView) getActivity().findViewById(R.id.chart_date_end);
-                chartDateStart.setText(first != null ? dateFormat.format(first) : "");
-                chartDateEnd.setText(end != null ? dateFormat.format(end) : "");
-            }
-
-            /**
-             * Called when the chart is finished drawing.
-             */
-            @Override
-            public void onChartDraw() {
-                // Do nothing
-            }
-        });
-
         ListView listHistory = (ListView) view.findViewById(R.id.list_view_history);
-        listHistory.addHeaderView(viewListHeader, null, false);
-        headerDayCount = inflater.inflate(R.layout.list_header_day_count, null);
-        headerDayCount.setVisibility(View.GONE);
-        listHistory.addHeaderView(headerDayCount, null, false);
         listHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -87,8 +57,36 @@ public class HistoryFragment extends Fragment {
             }
         });
 
-        com.github.mikephil.charting.charts.BarChart chart = new com.github.mikephil.charting.charts.BarChart(this.getActivity());
-        listHistory.addHeaderView(chart);
+        com.github.mikephil.charting.charts.BarChart chart = (com.github.mikephil.charting.charts.BarChart) inflater.inflate(R.layout.list_header_barchart, null);
+        chart.setDrawBarShadow(false);
+        chart.setDrawLegend(false);
+        chart.setDescription("");
+        chart.setDrawGridBackground(false);
+        chart.setDrawHorizontalGrid(false);
+        chart.setDrawVerticalGrid(false);
+        chart.setDrawXLabels(true);
+        chart.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return Integer.toString((int)value);
+            }
+        });
+        chart.setValueTextColor(Color.WHITE);
+        try {
+            List<NotificationDayView> rawData = getDatabaseHelper().getNotificationDao().getSummaryLastDays(14);
+            ArrayList<String> xVals = new ArrayList<String>(rawData.size());
+            ArrayList<BarEntry> yVals = new ArrayList<BarEntry>(rawData.size());
+            for (int i = 0; i < rawData.size(); i++) {
+                xVals.add(i, dateFormat.format(rawData.get(i).Date));
+                yVals.add(i, new BarEntry(rawData.get(i).Notifications.floatValue(), i));
+            }
+            BarDataSet dataSet = new BarDataSet(yVals, "test");
+            BarData data = new BarData(xVals, dataSet);
+            chart.setData(data);
+            listHistory.addHeaderView(chart, null, false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return view;
     }
 
@@ -98,27 +96,24 @@ public class HistoryFragment extends Fragment {
         ListView listHistory = (ListView) this.getActivity().findViewById(R.id.list_view_history);
         if (currentSelectedDate != null) {
             showDayListView(currentSelectedDate);
-            showDayLabelChart(currentSelectedDate, currentSelectedBarPosition);
         } else {
             listHistory.setAdapter(new NotificationAdapter(this.getActivity(), new LinkedList<NotificationAppView>()));
-            TextView chartDateCurrent = (TextView) getActivity().findViewById(R.id.chart_date_current);
-            chartDateCurrent.setVisibility(View.INVISIBLE);
-            headerDayCount.setVisibility(View.GONE);
         }
         try {
-            ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
+//            ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
             TextView textView = (TextView) getActivity().findViewById(R.id.history_empty);
             if (getDatabaseHelper().getApplicationDao().queryForEq(Application.FIELD_IGNORE, false).size() > 0) {
-                listView.setVisibility(View.VISIBLE);
+//                listView.setVisibility(View.VISIBLE);
                 textView.setVisibility(View.GONE);
-                barChart.update();
             } else {
-                listView.setVisibility(View.GONE);
+//                listView.setVisibility(View.GONE);
                 textView.setVisibility(View.VISIBLE);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        com.github.mikephil.charting.charts.BarChart chart = (com.github.mikephil.charting.charts.BarChart) this.getActivity().findViewById(R.id.chart);
+        chart.invalidate();
     }
 
     private void showDayListView(Date date) {
@@ -126,35 +121,9 @@ public class HistoryFragment extends Fragment {
         try {
             List<NotificationAppView> objects = getDatabaseHelper().getNotificationDao().getOverviewDay(date);
             listView.setAdapter(new NotificationAdapter(getActivity(), objects));
-
-            int totalCount = 0;
-            for (int i = 0; i < objects.size(); i++) {
-                totalCount += objects.get(i).Notifications;
-            }
-            TextView titleCounter = (TextView) headerDayCount.findViewById(R.id.title_counter);
-            titleCounter.setText(Integer.toString(totalCount));
-            TextView titleCounterSuffix = (TextView) headerDayCount.findViewById(R.id.title_counter_suffix);
-            if (totalCount == 1) {
-                titleCounterSuffix.setText(R.string.title_counter_suffix_single);
-            } else {
-                titleCounterSuffix.setText(R.string.title_counter_suffix_plural);
-            }
-            headerDayCount.setVisibility(View.VISIBLE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    private void showDayLabelChart(Date date, int position) {
-        TextView chartDateCurrent = (TextView) getActivity().findViewById(R.id.chart_date_current);
-        chartDateCurrent.setText(dateFormat.format(date));
-        chartDateCurrent.setVisibility(View.VISIBLE);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) chartDateCurrent.getLayoutParams();
-        int marginLeft = getResources().getDimensionPixelOffset(R.dimen.bar_chart_width_bar) * position
-                + getResources().getDimensionPixelOffset(R.dimen.bar_chart_width_bar) / 2 - chartDateCurrent.getWidth() / 2
-                + getResources().getDimensionPixelOffset(R.dimen.barchart_marginSides);
-        layoutParams.setMargins(marginLeft, 0, 0, 0);
-        chartDateCurrent.setLayoutParams(layoutParams);
     }
 
     @Override
