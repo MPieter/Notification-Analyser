@@ -32,6 +32,17 @@ public class HistoryFragment extends Fragment {
     private Date currentSelectedDate = null;
     private int currentSelectedBarPosition = -1;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM");
+    private View headerDayCount = null;
+    private int layoutId;
+
+    public HistoryFragment() {
+        this.layoutId = R.layout.fragment_history;
+    }
+
+
+    public HistoryFragment(int layoutId) {
+        this.layoutId = layoutId;
+    }
 
     public DatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {
@@ -44,7 +55,7 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_history, container, false);
+        View view = inflater.inflate(layoutId, container, false);
 
         ListView listHistory = (ListView) view.findViewById(R.id.list_view_history);
         listHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -112,8 +123,6 @@ public class HistoryFragment extends Fragment {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        com.github.mikephil.charting.charts.BarChart chart = (com.github.mikephil.charting.charts.BarChart) this.getActivity().findViewById(R.id.chart);
-        chart.invalidate();
     }
 
     private void showDayListView(Date date) {

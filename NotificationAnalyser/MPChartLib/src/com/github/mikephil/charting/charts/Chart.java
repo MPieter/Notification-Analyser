@@ -22,6 +22,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewParent;
 
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -279,7 +280,7 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
 
         mLimitLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mLimitLinePaint.setStyle(Paint.Style.STROKE);
-        
+
         mDrawPaint = new Paint(Paint.DITHER_FLAG);
     }
 
@@ -459,7 +460,7 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
      * drawn on the canvas directly.
      **/
     protected Bitmap mDrawBitmap;
-    
+
     /** paint object used for drawing the bitmap */
     protected Paint mDrawPaint;
 
@@ -488,17 +489,17 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
 
         if (mDrawBitmap == null || mDrawCanvas == null) {
 
-            // use RGB_565 for best performance
             mDrawBitmap = Bitmap.createBitmap(getWidth(), getHeight(),
                     Bitmap.Config.ARGB_4444);
             mDrawCanvas = new Canvas(mDrawBitmap);
         }
-        
+
         // clear everything
         mDrawBitmap.eraseColor(Color.TRANSPARENT);
 
-//        mDrawCanvas.drawColor(Color.WHITE);
-//        canvas.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.XOR); // clear all
+        // mDrawCanvas.drawColor(Color.WHITE);
+        // canvas.drawColor(Color.TRANSPARENT,
+        // android.graphics.PorterDuff.Mode.XOR); // clear all
     }
 
     /**
@@ -782,6 +783,11 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
 
         float posX, posY;
 
+        // contains the stacked legend size in pixels
+        float stack = 0f;
+
+        boolean wasStacked = false;
+
         switch (mLegend.getPosition()) {
             case BELOW_CHART_LEFT:
 
@@ -836,9 +842,6 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
                         - formTextSpaceAndForm;
                 posY = mLegend.getOffsetTop();
 
-                float stack = 0f;
-                boolean wasStacked = false;
-
                 for (int i = 0; i < labels.length; i++) {
 
                     mLegend.drawForm(mDrawCanvas, posX + stack, posY, mLegendFormPaint, i);
@@ -874,6 +877,47 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
                     }
                 }
                 break;
+            case RIGHT_OF_CHART_CENTER:
+                posX = getWidth() - mLegend.getMaximumEntryLength(mLegendLabelPaint)
+                        - formTextSpaceAndForm;
+                posY = getHeight() / 2f - mLegend.getFullHeight(mLegendLabelPaint) / 2f;
+
+                for (int i = 0; i < labels.length; i++) {
+
+                    mLegend.drawForm(mDrawCanvas, posX + stack, posY, mLegendFormPaint, i);
+
+                    if (labels[i] != null) {
+
+                        if (!wasStacked) {
+
+                            float x = posX;
+
+                            if (mLegend.getColors()[i] != -2)
+                                x += formTextSpaceAndForm;
+
+                            posY += textDrop;
+
+                            mLegend.drawLabel(mDrawCanvas, x, posY,
+                                    mLegendLabelPaint, i);
+                        } else {
+
+                            posY += textSize * 1.2f + formSize;
+
+                            mLegend.drawLabel(mDrawCanvas, posX, posY,
+                                    mLegendLabelPaint, i);
+
+                        }
+
+                        // make a step down
+                        posY += mLegend.getYEntrySpace();
+                        stack = 0f;
+                    } else {
+                        stack += formSize + stackSpace;
+                        wasStacked = true;
+                    }
+                }
+
+                break;
             case BELOW_CHART_CENTER:
 
                 float fullSize = mLegend.getFullWidth(mLegendLabelPaint);
@@ -902,6 +946,51 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
 
                 Log.i(LOG_TAG, "content bottom: " + mContentRect.bottom + ", height: "
                         + getHeight() + ", posY: " + posY + ", formSize: " + formSize);
+
+                break;
+            case PIECHART_CENTER:
+
+                posX = getWidth()
+                        / 2f
+                        - (mLegend.getMaximumEntryLength(mLegendLabelPaint) + mLegend
+                                .getXEntrySpace())
+                        / 2f;
+                posY = getHeight() / 2f - mLegend.getFullHeight(mLegendLabelPaint) / 2f;
+
+                for (int i = 0; i < labels.length; i++) {
+
+                    mLegend.drawForm(mDrawCanvas, posX + stack, posY, mLegendFormPaint, i);
+
+                    if (labels[i] != null) {
+
+                        if (!wasStacked) {
+
+                            float x = posX;
+
+                            if (mLegend.getColors()[i] != -2)
+                                x += formTextSpaceAndForm;
+
+                            posY += textDrop;
+
+                            mLegend.drawLabel(mDrawCanvas, x, posY,
+                                    mLegendLabelPaint, i);
+                        } else {
+
+                            posY += textSize * 1.2f + formSize;
+
+                            mLegend.drawLabel(mDrawCanvas, posX, posY,
+                                    mLegendLabelPaint, i);
+
+                        }
+
+                        // make a step down
+                        posY += mLegend.getYEntrySpace();
+                        stack = 0f;
+                    } else {
+                        stack += formSize + stackSpace;
+                        wasStacked = true;
+                    }
+                }
 
                 break;
         }
@@ -949,31 +1038,6 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
     protected Highlight[] mIndicesToHightlight = new Highlight[0];
 
     /**
-     * checks if the given index in the given DataSet is set for highlighting or
-     * not
-     * 
-     * @param xIndex
-     * @param dataSetIndex
-     * @return
-     */
-    public boolean needsHighlight(int xIndex, int dataSetIndex) {
-
-        // no highlight
-        if (!valuesToHighlight())
-            return false;
-
-        for (int i = 0; i < mIndicesToHightlight.length; i++)
-
-            // check if the xvalue for the given dataset needs highlight
-            if (mIndicesToHightlight[i].getXIndex() == xIndex
-                    && mIndicesToHightlight[i].getDataSetIndex() == dataSetIndex
-                    && xIndex <= mDeltaX)
-                return true;
-
-        return false;
-    }
-
-    /**
      * Returns true if there are values to highlight, false if there are no
      * values to highlight. Checks if the highlight array is null, has a length
      * of zero or if the first object is null.
@@ -1001,6 +1065,26 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
 
         // redraw the chart
         invalidate();
+    }
+
+    /**
+     * Highlights the value at the given x-index in the given DataSet. Provide
+     * -1 as the x-index to undo all highlighting.
+     * 
+     * @param xIndex
+     * @param dataSetIndex
+     */
+    public void highlightValue(int xIndex, int dataSetIndex) {
+
+        if (xIndex < 0 || dataSetIndex < 0 || xIndex >= mOriginalData.getXValCount()
+                || dataSetIndex >= mOriginalData.getDataSetCount()) {
+
+            highlightValues(null);
+        } else {
+            highlightValues(new Highlight[] {
+                    new Highlight(xIndex, dataSetIndex)
+            });
+        }
     }
 
     /**
@@ -1652,6 +1736,22 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
         return mContentRect;
     }
 
+    /**
+     * disables intercept touchevents
+     */
+    public void disableScroll() {
+        ViewParent parent = getParent();
+        parent.requestDisallowInterceptTouchEvent(true);
+    }
+
+    /**
+     * enables intercept touchevents
+     */
+    public void enableScroll() {
+        ViewParent parent = getParent();
+        parent.requestDisallowInterceptTouchEvent(false);
+    }
+
     /** paint for the grid lines (only line and barchart) */
     public static final int PAINT_GRID = 3;
 
@@ -2194,6 +2294,15 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+
+        // create a new bitmap with the new dimensions
+        mDrawBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_4444);
+        mDrawCanvas = new Canvas(mDrawBitmap);
+
+        // prepare content rect and matrices
+        prepareContentRect();
+        prepare();
+
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
