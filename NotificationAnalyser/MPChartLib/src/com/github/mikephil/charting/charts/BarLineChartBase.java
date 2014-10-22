@@ -9,13 +9,11 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
-import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.ViewParent;
 
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarLineScatterCandleData;
@@ -87,8 +85,11 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
     /** flat that indicates if double tap zoom is enabled or not */
     protected boolean mDoubleTapToZoomEnabled = true;
 
-    /** if true, dragging / scaling is enabled for the chart */
-    protected boolean mDragScaleEnabled = true;
+    /** if true, dragging is enabled for the chart */
+    private boolean mDragEnabled = true;
+
+    /** if true, scaling is enabled for the chart */
+    private boolean mScaleEnabled = true;
 
     /** if true, the y range is predefined */
     protected boolean mFixedYValues = false;
@@ -296,7 +297,7 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
         float scaleY = (float) ((getHeight() - mOffsetTop - mOffsetBottom) / mDeltaY);
 
         // setup all matrices
-         mMatrixValueToPx.reset();
+        mMatrixValueToPx.reset();
         mMatrixValueToPx.postTranslate(0, -mYChartMin);
         mMatrixValueToPx.postScale(scaleX, -scaleY);
     }
@@ -305,7 +306,7 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
      * Prepares the matrix that contains all offsets.
      */
     private void prepareMatrixOffset() {
-        
+
         mMatrixOffset.reset();
 
         // offset.postTranslate(mOffsetLeft, getHeight() - mOffsetBottom);
@@ -317,7 +318,7 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
             mMatrixOffset.postScale(1.0f, -1.0f);
         }
 
-//        mMatrixOffset.set(offset);
+        // mMatrixOffset.set(offset);
 
         // mMatrixOffset.reset();
         //
@@ -347,10 +348,11 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
             if (mLegend == null)
                 return;
 
-            if (mLegend.getPosition() == LegendPosition.RIGHT_OF_CHART) {
+            if (mLegend.getPosition() == LegendPosition.RIGHT_OF_CHART
+                    || mLegend.getPosition() == LegendPosition.RIGHT_OF_CHART_CENTER) {
 
                 // this is the space between the legend and the chart
-                float spacing = Utils.convertDpToPixel(7f);
+                float spacing = Utils.convertDpToPixel(12f);
 
                 legendRight = mLegend.getMaximumEntryLength(mLegendLabelPaint)
                         + mLegend.getFormSize() + mLegend.getFormToTextSpace() + spacing;
@@ -481,12 +483,13 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
     @Override
     protected void calcMinMax(boolean fixedValues) {
         super.calcMinMax(fixedValues); // calc min and max in the super class
-        
-        if(!fixedValues) {
-         
+
+        if (!fixedValues) {
+
             // additional handling for space (default 15% space)
             // float space = Math.abs(mDeltaY / 100f * 15f);
-            float space = Math.abs(Math.max(Math.abs(mYChartMax), Math.abs(mYChartMin)) / 100f * 15f);
+            float space = Math
+                    .abs(Math.max(Math.abs(mYChartMax), Math.abs(mYChartMin)) / 100f * 15f);
             if (Math.abs(mYChartMax) - Math.abs(mYChartMin) < 0.00001f) {
                 if (Math.abs(mYChartMax) < 10f)
                     space = 1f;
@@ -927,21 +930,25 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
         if (limitLines == null)
             return;
 
+        float[] pts = new float[4];
+
         for (int i = 0; i < limitLines.size(); i++) {
 
             LimitLine l = limitLines.get(i);
 
-            Path line = new Path();
-            line.moveTo(0f, l.getLimit());
-            line.lineTo(mDeltaX, l.getLimit());
+            pts[1] = l.getLimit();
+            pts[3] = l.getLimit();
 
-            transformPath(line);
+            transformPointArray(pts);
+
+            pts[0] = 0;
+            pts[2] = getWidth();
 
             mLimitLinePaint.setColor(l.getLineColor());
             mLimitLinePaint.setPathEffect(l.getDashPathEffect());
             mLimitLinePaint.setStrokeWidth(l.getLineWidth());
 
-            mDrawCanvas.drawPath(line, mLimitLinePaint);
+            mDrawCanvas.drawLines(pts, mLimitLinePaint);
 
             // if drawing the limit-value is enabled
             if (l.isDrawValueEnabled()) {
@@ -1038,6 +1045,7 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
 
         if (mListener == null || mDataNotSet)
             return false;
@@ -1053,22 +1061,6 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
      * ################ ################ ################ ################
      */
     /** CODE BELOW THIS RELATED TO SCALING AND GESTURES */
-
-    /**
-     * disables intercept touchevents
-     */
-    public void disableScroll() {
-        ViewParent parent = getParent();
-        parent.requestDisallowInterceptTouchEvent(true);
-    }
-
-    /**
-     * enables intercept touchevents
-     */
-    public void enableScroll() {
-        ViewParent parent = getParent();
-        parent.requestDisallowInterceptTouchEvent(false);
-    }
 
     /**
      * Zooms in by 1.4f, x and y are the coordinates (in pixels) of the zoom
@@ -1531,21 +1523,42 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
     }
 
     /**
-     * set this to true to enable dragging / scaling for the chart
+     * Set this to true to enable dragging (moving the chart with the finger)
+     * for the chart (this does not effect scaling).
      * 
      * @param enabled
      */
-    public void setDragScaleEnabled(boolean enabled) {
-        this.mDragScaleEnabled = enabled;
+    public void setDragEnabled(boolean enabled) {
+        this.mDragEnabled = enabled;
     }
 
     /**
-     * returns true if dragging / scaling is enabled for the chart, false if not
+     * Returns true if dragging is enabled for the chart, false if not.
      * 
      * @return
      */
-    public boolean isDragScaleEnabled() {
-        return mDragScaleEnabled;
+    public boolean isDragEnabled() {
+        return mDragEnabled;
+    }
+
+    /**
+     * Set this to true to enable scaling (zooming in and out by gesture) for
+     * the chart (this does not effect dragging).
+     * 
+     * @param enabled
+     */
+    public void setScaleEnabled(boolean enabled) {
+        this.mScaleEnabled = enabled;
+    }
+
+    /**
+     * Returns true if scaling (zooming in and out by gesture) is enabled for
+     * the chart, false if not.
+     * 
+     * @return
+     */
+    public boolean isScaleEnabled() {
+        return mScaleEnabled;
     }
 
     /**
@@ -1871,10 +1884,10 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
      * @return
      */
     public boolean isFullyZoomedOutY() {
-        if (mScaleY <= mMinScaleY)
-            return true;
-        else
+        if (mScaleY > mMinScaleY || mMinScaleY > 1f)
             return false;
+        else
+            return true;
     }
 
     /**
@@ -1884,10 +1897,10 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
      * @return
      */
     public boolean isFullyZoomedOutX() {
-        if (mScaleX <= mMinScaleX)
-            return true;
-        else
+        if (mScaleX > mMinScaleX || mMinScaleX > 1f)
             return false;
+        else
+            return true;
     }
 
     /**

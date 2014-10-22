@@ -97,8 +97,8 @@ public class HistoryFragment extends Fragment {
             }
         });
 
-        com.github.mikephil.charting.charts.BarChart chart = new com.github.mikephil.charting.charts.BarChart(this.getActivity());
-        listHistory.addHeaderView(chart);
+        //com.github.mikephil.charting.charts.BarChart chart = new com.github.mikephil.charting.charts.BarChart(this.getActivity());
+        //listHistory.addHeaderView(chart);
         return view;
     }
 

@@ -15,7 +15,6 @@ import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.utils.Legend.LegendPosition;
 import com.github.mikephil.charting.utils.Utils;
 
 import java.util.ArrayList;
@@ -173,50 +172,6 @@ public class PieChart extends PieRadarChartBase<PieData> {
         calcAngles();
     }
 
-    @Override
-    protected void calculateOffsets() {
-
-        // setup offsets for legend
-        if (mDrawLegend) {
-
-            float legendRight = 0f, legendBottom = 0f, legendTop = 0f;
-
-            if (mLegend == null)
-                return;
-
-            if (mLegend.getPosition() == LegendPosition.RIGHT_OF_CHART) {
-
-                // this is the space between the legend and the chart
-                float spacing = Utils.convertDpToPixel(7f);
-
-                legendRight = mLegend.getMaximumEntryLength(mLegendLabelPaint)
-                        + mLegend.getFormSize() + mLegend.getFormToTextSpace() + spacing;
-
-                mLegendLabelPaint.setTextAlign(Align.LEFT);
-                legendTop = mLegend.getFullHeight(mLegendLabelPaint);
-
-            } else if (mLegend.getPosition() == LegendPosition.BELOW_CHART_LEFT
-                    || mLegend.getPosition() == LegendPosition.BELOW_CHART_RIGHT
-                    || mLegend.getPosition() == LegendPosition.BELOW_CHART_CENTER) {
-
-                legendBottom = mLegendLabelPaint.getTextSize() * 4f;
-            }
-
-            mLegend.setOffsetBottom(legendBottom);
-            mLegend.setOffsetRight(legendRight);
-
-            float min = Utils.convertDpToPixel(11f);
-
-            mLegend.setOffsetTop(min);
-            mLegend.setOffsetLeft(min);
-           
-            mOffsetTop = Math.max(min, legendTop);
-            mOffsetBottom = Math.max(min, legendBottom);
-
-            applyCalculatedOffsets();
-        }
-    }
-
     /**
      * calculates the needed angles for the chart slices
      */
@@ -262,7 +217,7 @@ public class PieChart extends PieRadarChartBase<PieData> {
 
                 // get the index to highlight
                 int xIndex = mIndicesToHightlight[i].getXIndex();
-                if (xIndex >= mDrawAngles.length || xIndex > mDeltaX * mPhaseX)
+                if (xIndex >= mDrawAngles.length)
                     continue;
 
                 if (xIndex == 0)
@@ -281,9 +236,6 @@ public class PieChart extends PieRadarChartBase<PieData> {
                                 .getDataSetIndex());
 
                 if (set == null)
-                    continue;
-
-                if (set.getEntryForXIndex(xIndex) == null)
                     continue;
 
                 float shift = set.getSelectionShift();
@@ -347,6 +299,30 @@ public class PieChart extends PieRadarChartBase<PieData> {
                 cnt++;
             }
         }
+    }
+
+    /**
+     * checks if the given index in the given DataSet is set for highlighting or
+     * not
+     * 
+     * @param xIndex
+     * @param dataSetIndex
+     * @return
+     */
+    private boolean needsHighlight(int xIndex, int dataSetIndex) {
+
+        // no highlight
+        if (!valuesToHighlight())
+            return false;
+
+        for (int i = 0; i < mIndicesToHightlight.length; i++)
+
+            // check if the xvalue for the given dataset needs highlight
+            if (mIndicesToHightlight[i].getXIndex() == xIndex
+                    && mIndicesToHightlight[i].getDataSetIndex() == dataSetIndex)
+                return true;
+
+        return false;
     }
 
     /**
@@ -481,11 +457,13 @@ public class PieChart extends PieRadarChartBase<PieData> {
                     y -= lineHeight / 2;
 
                     mDrawCanvas.drawText(val, x, y, mValuePaint);
-                    mDrawCanvas.drawText(mCurrentData.getXVals().get(j), x, y + lineHeight,
-                            mValuePaint);
+                    if (j < mCurrentData.getXValCount())
+                        mDrawCanvas.drawText(mCurrentData.getXVals().get(j), x, y + lineHeight,
+                                mValuePaint);
 
                 } else if (mDrawXVals && !mDrawYValues) {
-                    mDrawCanvas.drawText(mCurrentData.getXVals().get(j), x, y, mValuePaint);
+                    if (j < mCurrentData.getXValCount())
+                        mDrawCanvas.drawText(mCurrentData.getXVals().get(j), x, y, mValuePaint);
                 } else if (!mDrawXVals && mDrawYValues) {
 
                     mDrawCanvas.drawText(val, x, y, mValuePaint);
@@ -665,6 +643,16 @@ public class PieChart extends PieRadarChartBase<PieData> {
      */
     public boolean isDrawXValuesEnabled() {
         return mDrawXVals;
+    }
+
+    @Override
+    protected float getRequiredBottomOffset() {
+        return mLegendLabelPaint.getTextSize() * 4f;
+    }
+
+    @Override
+    protected float getRequiredBaseOffset() {
+        return 0;
     }
 
     @Override
