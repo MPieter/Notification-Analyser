@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -68,7 +69,7 @@ public class HistoryFragment extends Fragment {
             }
         });
 
-        com.github.mikephil.charting.charts.BarChart chart = (com.github.mikephil.charting.charts.BarChart) inflater.inflate(R.layout.list_header_barchart, null);
+        BarChart chart = (BarChart) inflater.inflate(R.layout.list_header_barchart, listHistory);
         chart.setDrawBarShadow(false);
         chart.setDrawLegend(false);
         chart.setDescription("");
@@ -111,13 +112,13 @@ public class HistoryFragment extends Fragment {
             listHistory.setAdapter(new NotificationAdapter(this.getActivity(), new LinkedList<NotificationAppView>()));
         }
         try {
-//            ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
+            ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
             TextView textView = (TextView) getActivity().findViewById(R.id.history_empty);
             if (getDatabaseHelper().getApplicationDao().queryForEq(Application.FIELD_IGNORE, false).size() > 0) {
-//                listView.setVisibility(View.VISIBLE);
+                listView.setVisibility(View.VISIBLE);
                 textView.setVisibility(View.GONE);
             } else {
-//                listView.setVisibility(View.GONE);
+                listView.setVisibility(View.GONE);
                 textView.setVisibility(View.VISIBLE);
             }
         } catch (SQLException e) {
