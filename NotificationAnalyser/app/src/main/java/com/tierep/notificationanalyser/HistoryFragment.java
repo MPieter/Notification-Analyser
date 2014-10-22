@@ -29,6 +29,16 @@ public class HistoryFragment extends Fragment {
     private BarChart barChart = null;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM");
     private View headerDayCount = null;
+    private int layoutId;
+
+    public HistoryFragment() {
+        this.layoutId = R.layout.fragment_history;
+    }
+
+
+    public HistoryFragment(int layoutId) {
+        this.layoutId = layoutId;
+    }
 
     public DatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {
@@ -41,7 +51,7 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_history, container, false);
+        View view = inflater.inflate(layoutId, container, false);
 
         View viewListHeader = inflater.inflate(R.layout.list_header_chart, null);
         barChart = (BarChart) viewListHeader.findViewById(R.id.bar_chart);
@@ -110,10 +120,10 @@ public class HistoryFragment extends Fragment {
             TextView textView = (TextView) getActivity().findViewById(R.id.history_empty);
             if (getDatabaseHelper().getApplicationDao().queryForEq(Application.FIELD_IGNORE, false).size() > 0) {
                 listView.setVisibility(View.VISIBLE);
-                textView.setVisibility(View.GONE);
+                //textView.setVisibility(View.GONE);
                 barChart.update();
             } else {
-                listView.setVisibility(View.GONE);
+                //listView.setVisibility(View.GONE);
                 textView.setVisibility(View.VISIBLE);
             }
         } catch (SQLException e) {
