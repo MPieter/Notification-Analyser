@@ -3,6 +3,7 @@ package com.tierep.notificationanalyser;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.interfaces.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ValueFormatter;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.tierep.notificationanalyser.Models.Application;
@@ -35,14 +39,11 @@ public class HistoryFragment extends Fragment {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM");
     private View headerDayCount = null;
     private int layoutId;
+    private Paint paintWhite = new Paint();
 
     public HistoryFragment() {
         this.layoutId = R.layout.fragment_history;
-    }
-
-
-    public HistoryFragment(int layoutId) {
-        this.layoutId = layoutId;
+        this.paintWhite.setColor(Color.WHITE);
     }
 
     public DatabaseHelper getDatabaseHelper() {
@@ -69,18 +70,32 @@ public class HistoryFragment extends Fragment {
             }
         });
 
-        BarChart chart = (BarChart) inflater.inflate(R.layout.list_header_barchart, listHistory);
+        View header = inflater.inflate(R.layout.list_header_barchart, listHistory, false);
+        BarChart chart = (BarChart) header.findViewById(R.id.chart);
         chart.setDrawBarShadow(false);
         chart.setDrawLegend(false);
         chart.setDescription("");
         chart.setDrawGridBackground(false);
         chart.setDrawHorizontalGrid(false);
         chart.setDrawVerticalGrid(false);
+        chart.setPaint(paintWhite, Chart.PAINT_XLABEL);
         chart.setDrawXLabels(true);
+        chart.setDrawYLabels(false);
         chart.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return Integer.toString((int)value);
+                return Integer.toString((int) value);
+            }
+        });
+        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, int dataSetIndex) {
+                showDayListView((Date) e.getData());
+            }
+
+            @Override
+            public void onNothingSelected() {
+
             }
         });
         chart.setValueTextColor(Color.WHITE);
@@ -89,8 +104,9 @@ public class HistoryFragment extends Fragment {
             ArrayList<String> xVals = new ArrayList<String>(rawData.size());
             ArrayList<BarEntry> yVals = new ArrayList<BarEntry>(rawData.size());
             for (int i = 0; i < rawData.size(); i++) {
-                xVals.add(i, dateFormat.format(rawData.get(i).Date));
-                yVals.add(i, new BarEntry(rawData.get(i).Notifications.floatValue(), i));
+                Date currentDate = rawData.get(i).Date;
+                xVals.add(i, dateFormat.format(currentDate));
+                yVals.add(i, new BarEntry(rawData.get(i).Notifications.floatValue(), i, currentDate));
             }
             BarDataSet dataSet = new BarDataSet(yVals, "test");
             BarData data = new BarData(xVals, dataSet);
