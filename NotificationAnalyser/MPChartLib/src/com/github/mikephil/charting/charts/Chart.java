@@ -1749,7 +1749,11 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
      */
     public void enableScroll() {
         ViewParent parent = getParent();
-        parent.requestDisallowInterceptTouchEvent(false);
+        try {
+            parent.requestDisallowInterceptTouchEvent(false);
+        } catch (NullPointerException e) {
+            // Do nothing for the moment
+        }
     }
 
     /** paint for the grid lines (only line and barchart) */

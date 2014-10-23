@@ -18,7 +18,7 @@ public abstract class LabelBase {
     private float mTextSize = 10f;
     
     /** the text color to use */
-    private int mTextColor = Color.BLACK;
+    private int mTextColor = Color.WHITE;
 
     /** default constructor */
     public LabelBase() {
