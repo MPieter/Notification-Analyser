@@ -33,5 +33,7 @@
     <string name="history_monthly">Monthly</string>
     <string name="title_activity_about">About</string>
     <string name="hello_world">Hello world!</string>
+    <string name="about_author">Pieter Meiresone</string>
+    <string name="about_location">Made in Belgium</string>
 
 </resources>
