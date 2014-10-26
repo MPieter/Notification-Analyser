@@ -4,7 +4,7 @@ import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.support.ConnectionSource;
 import com.tierep.notificationanalyser.NotificationAppView;
-import com.tierep.notificationanalyser.NotificationDayView;
+import com.tierep.notificationanalyser.NotificationDateView;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -47,6 +47,40 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
         return this.getOverviewGeneric(rawQuery);
     }
 
+    @Override
+    public List<NotificationAppView> getOverviewWeek(Date date) throws SQLException {
+        DateFormat df = new SimpleDateFormat("w-yyyy");
+        String dateString = df.format(date);
+
+        String rawQuery = "SELECT " + NotificationItem.FIELD_PACKAGE_NAME
+                + ", COUNT(*) FROM " + NotificationItem.FIELD_TABLE_NAME
+                + " WHERE strftime('%W-%Y'," + NotificationItem.FIELD_DATE + ") = '" + dateString + "'"
+                + " AND " + NotificationItem.FIELD_PACKAGE_NAME + " IN "
+                + " (SELECT  " + Application.FIELD_PACKAGE_NAME
+                + " FROM " + Application.FIELD_TABLE_NAME
+                + " WHERE " + Application.FIELD_IGNORE + " = 0)"
+                + " GROUP BY " + NotificationItem.FIELD_PACKAGE_NAME;
+
+        return this.getOverviewGeneric(rawQuery);
+    }
+
+    @Override
+    public List<NotificationAppView> getOverviewMonth(Date date) throws SQLException {
+        DateFormat df = new SimpleDateFormat("MM-yyyy");
+        String dateString = df.format(date);
+
+        String rawQuery = "SELECT " + NotificationItem.FIELD_PACKAGE_NAME
+                + ", COUNT(*) FROM " + NotificationItem.FIELD_TABLE_NAME
+                + " WHERE strftime('%m-%Y'," + NotificationItem.FIELD_DATE + ") = '" + dateString + "'"
+                + " AND " + NotificationItem.FIELD_PACKAGE_NAME + " IN "
+                + " (SELECT  " + Application.FIELD_PACKAGE_NAME
+                + " FROM " + Application.FIELD_TABLE_NAME
+                + " WHERE " + Application.FIELD_IGNORE + " = 0)"
+                + " GROUP BY " + NotificationItem.FIELD_PACKAGE_NAME;
+
+        return this.getOverviewGeneric(rawQuery);
+    }
+
 
     private List<NotificationAppView> getOverviewGeneric(String rawQuery) throws SQLException {
         List<NotificationAppView> list = new LinkedList<NotificationAppView>();
@@ -66,10 +100,8 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
     }
 
     @Override
-    public List<NotificationDayView> getSummaryLastDays(int days) throws SQLException {
-        LinkedList<NotificationDayView> list = new LinkedList<NotificationDayView>();
-        GenericRawResults<String[]> rawResults = this.queryRaw(
-                "SELECT " + NotificationItem.FIELD_DATE
+    public List<NotificationDateView> getSummaryLastDays(int days) throws SQLException {
+        String rawQuery = "SELECT " + NotificationItem.FIELD_DATE
                         + ", COUNT(*) FROM " + NotificationItem.FIELD_TABLE_NAME
                         + " WHERE " + NotificationItem.FIELD_PACKAGE_NAME + " IN "
                             + " (SELECT  " + Application.FIELD_PACKAGE_NAME
@@ -77,14 +109,51 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
                             + " WHERE " + Application.FIELD_IGNORE + " = 0)"
                         + " GROUP BY strftime('%d-%m-%Y', " + NotificationItem.FIELD_DATE + ")"
                         + " ORDER BY datetime(" + NotificationItem.FIELD_DATE + ") DESC "
-                        + " LIMIT " + days);
+                        + " LIMIT " + days;
+        return this.getSummaryLastPeriod(rawQuery);
+    }
+
+    @Override
+    public List<NotificationDateView> getSummaryLastWeeks(int weeks) throws SQLException {
+        String rawQuery = "SELECT " + NotificationItem.FIELD_DATE
+                + ", COUNT(*) FROM " + NotificationItem.FIELD_TABLE_NAME
+                + " WHERE " + NotificationItem.FIELD_PACKAGE_NAME + " IN "
+                + " (SELECT  " + Application.FIELD_PACKAGE_NAME
+                + " FROM " + Application.FIELD_TABLE_NAME
+                + " WHERE " + Application.FIELD_IGNORE + " = 0)"
+                + " GROUP BY strftime('%W-%Y', " + NotificationItem.FIELD_DATE + ")"
+                + " ORDER BY datetime(" + NotificationItem.FIELD_DATE + ") DESC "
+                + " LIMIT " + weeks;
+
+        return this.getSummaryLastPeriod(rawQuery);
+    }
+
+    @Override
+    public List<NotificationDateView> getSummaryLastMonths(int months) throws SQLException {
+        String rawQuery = "SELECT " + NotificationItem.FIELD_DATE
+                + ", COUNT(*) FROM " + NotificationItem.FIELD_TABLE_NAME
+                + " WHERE " + NotificationItem.FIELD_PACKAGE_NAME + " IN "
+                + " (SELECT  " + Application.FIELD_PACKAGE_NAME
+                + " FROM " + Application.FIELD_TABLE_NAME
+                + " WHERE " + Application.FIELD_IGNORE + " = 0)"
+                + " GROUP BY strftime('%m-%Y', " + NotificationItem.FIELD_DATE + ")"
+                + " ORDER BY datetime(" + NotificationItem.FIELD_DATE + ") DESC "
+                + " LIMIT " + months;
+
+        return this.getSummaryLastPeriod(rawQuery);
+    }
+
+    private List<NotificationDateView> getSummaryLastPeriod(String rawQuery) throws SQLException {
+        LinkedList<NotificationDateView> list = new LinkedList<NotificationDateView>();
+        GenericRawResults<String[]> rawResults = this.queryRaw(rawQuery);
         List<String[]> results = rawResults.getResults();
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
         for (int i = 0; i < results.size(); i++) {
             try {
                 Date date = formatter.parse(results.get(i)[0]);
                 Integer notifications = Integer.parseInt(results.get(i)[1]);
-                list.add(new NotificationDayView(date, notifications));
+                list.add(new NotificationDateView(date, notifications));
             } catch (ParseException e) {
                 e.printStackTrace();
             }

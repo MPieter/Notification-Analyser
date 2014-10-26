@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,17 +33,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class HistoryFragment extends Fragment {
+public abstract class HistoryFragment extends Fragment {
     private DatabaseHelper databaseHelper = null;
     private Date currentSelectedDate = null;
-    private int currentSelectedBarPosition = -1;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM");
-    private View headerDayCount = null;
-    private int layoutId;
-    private Paint paintWhite = new Paint();
+    protected SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM");
+    protected Paint paintWhite = new Paint();
 
     public HistoryFragment() {
-        this.layoutId = R.layout.fragment_history;
         this.paintWhite.setColor(Color.WHITE);
     }
 
@@ -57,7 +54,7 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(layoutId, container, false);
+        View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         ListView listHistory = (ListView) view.findViewById(R.id.list_view_history);
         listHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,8 +67,8 @@ public class HistoryFragment extends Fragment {
             }
         });
 
-        View header = inflater.inflate(R.layout.list_header_barchart, listHistory, false);
-        BarChart chart = (BarChart) header.findViewById(R.id.chart);
+        BarChart chart = new BarChart(getActivity());
+        chart.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, ((int) getResources().getDimension(R.dimen.bar_chart_height))));
         chart.setDrawBarShadow(false);
         chart.setDrawLegend(false);
         chart.setDescription("");
@@ -100,7 +97,7 @@ public class HistoryFragment extends Fragment {
         });
         chart.setValueTextColor(Color.WHITE);
         try {
-            List<NotificationDayView> rawData = getDatabaseHelper().getNotificationDao().getSummaryLastDays(14);
+            List<NotificationDateView> rawData = this.getChartData(14);
             ArrayList<String> xVals = new ArrayList<String>(rawData.size());
             ArrayList<BarEntry> yVals = new ArrayList<BarEntry>(rawData.size());
             for (int i = 0; i < rawData.size(); i++) {
@@ -112,6 +109,7 @@ public class HistoryFragment extends Fragment {
             BarData data = new BarData(xVals, dataSet);
             chart.setData(data);
             listHistory.addHeaderView(chart, null, false);
+            listHistory.setBackgroundColor(getResources().getColor(android.R.color.holo_green_dark));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -142,10 +140,14 @@ public class HistoryFragment extends Fragment {
         }
     }
 
-    private void showDayListView(Date date) {
+    protected abstract List<NotificationDateView> getChartData(int items) throws SQLException;
+
+    protected abstract List<NotificationAppView> getListViewDate(Date date) throws SQLException;
+
+    protected void showDayListView(Date date) {
         ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
         try {
-            List<NotificationAppView> objects = getDatabaseHelper().getNotificationDao().getOverviewDay(date);
+            List<NotificationAppView> objects = this.getListViewDate(date);
             listView.setAdapter(new NotificationAdapter(getActivity(), objects));
         } catch (SQLException e) {
             e.printStackTrace();

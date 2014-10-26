@@ -2,21 +2,21 @@ package com.tierep.notificationanalyser;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v13.app.FragmentPagerAdapter;
 
 /**
  * Created by pieter on 20/09/14.
  */
-public class HistoryPagerAdapter extends FragmentStatePagerAdapter {
+public class HistoryPagerAdapter extends FragmentPagerAdapter {
     Fragment fDaily = null;
     Fragment fWeekly = null;
     Fragment fMonthly = null;
 
     public HistoryPagerAdapter(FragmentManager fm) {
         super(fm);
-        fDaily = new HistoryFragment();
-        fWeekly = new HistoryFragment();
-        fMonthly = new HistoryFragment();
+        fDaily = new HistoryDailyFragment();
+        fWeekly = new HistoryWeeklyFragment();
+        fMonthly = new HistoryMonthlyFragment();
     }
 
     @Override

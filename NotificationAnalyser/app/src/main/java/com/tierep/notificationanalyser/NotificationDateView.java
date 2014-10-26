@@ -8,16 +8,16 @@ import java.util.Date;
  *
  * Created by pieter on 24/09/14.
  */
-public class NotificationDayView {
+public class NotificationDateView {
     public Date Date;
     public Integer Notifications;
 
-    public NotificationDayView() {
+    public NotificationDateView() {
         this.Date = null;
         this.Notifications = 0;
     }
 
-    public NotificationDayView(Date date, Integer notifications) {
+    public NotificationDateView(Date date, Integer notifications) {
         this.Date = date;
         this.Notifications = notifications;
     }

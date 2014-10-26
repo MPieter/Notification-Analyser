@@ -3,6 +3,8 @@ package com.tierep.notificationanalyser;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -35,7 +37,13 @@ public class DrawerActivity extends Activity implements NotificationAccessDialog
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
-
+        try {
+            ActivityInfo ai = this.getPackageManager().getActivityInfo(this.getComponentName(), 0);
+            String appLabel = ai.loadLabel(getPackageManager()).toString();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        currentTitle = getTitle().toString();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.drawer_list);
         drawerItems = getResources().getStringArray(R.array.navigation_drawer_list);
@@ -56,7 +64,7 @@ public class DrawerActivity extends Activity implements NotificationAccessDialog
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getActionBar().setTitle(getTitle());
+                getActionBar().setTitle(R.string.app_name);
             }
 
             @Override
@@ -93,8 +101,6 @@ public class DrawerActivity extends Activity implements NotificationAccessDialog
 
         drawerList.setItemChecked(position, true);
         drawerLayout.closeDrawer(drawerList);
-        currentTitle = drawerItems[position];
-        getActionBar().setTitle(drawerItems[position]);
         if (intent != null) startActivity(intent);
     }
 
