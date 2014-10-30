@@ -36,7 +36,6 @@ import java.util.List;
 public abstract class HistoryFragment extends Fragment {
     private DatabaseHelper databaseHelper = null;
     private Date currentSelectedDate = null;
-    protected SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM");
     protected Paint paintWhite = new Paint();
 
     public HistoryFragment() {
@@ -78,6 +77,7 @@ public abstract class HistoryFragment extends Fragment {
         chart.setPaint(paintWhite, Chart.PAINT_XLABEL);
         chart.setDrawXLabels(true);
         chart.setDrawYLabels(false);
+        chart.getXLabels().setCenterXLabelText(true);
         chart.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
@@ -102,7 +102,7 @@ public abstract class HistoryFragment extends Fragment {
             ArrayList<BarEntry> yVals = new ArrayList<BarEntry>(rawData.size());
             for (int i = 0; i < rawData.size(); i++) {
                 Date currentDate = rawData.get(i).Date;
-                xVals.add(i, dateFormat.format(currentDate));
+                xVals.add(i, getDateFormat().format(currentDate));
                 yVals.add(i, new BarEntry(rawData.get(i).Notifications.floatValue(), i, currentDate));
             }
             BarDataSet dataSet = new BarDataSet(yVals, "test");
@@ -142,6 +142,12 @@ public abstract class HistoryFragment extends Fragment {
     protected abstract List<NotificationDateView> getChartData(int items) throws SQLException;
 
     protected abstract List<NotificationAppView> getListViewDate(Date date) throws SQLException;
+
+    /**
+     * Gets the SimpleDateFormat used for formatting the labels on the chart.
+     * @return the correct SimpleDateFormat.
+     */
+    protected abstract SimpleDateFormat getDateFormat();
 
     protected void showDayListView(Date date) {
         ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
