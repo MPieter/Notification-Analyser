@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
@@ -49,12 +50,23 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
 
     @Override
     public List<NotificationAppView> getOverviewWeek(Date date) throws SQLException {
-        DateFormat df = new SimpleDateFormat("w-yyyy");
-        String dateString = df.format(date);
+        Calendar cal = Calendar.getInstance();
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
+        cal.setTime(date);
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+        Date firstDayOfWeek = cal.getTime();
+
+        cal.add(Calendar.DATE, 6);
+        Date lastDayOfWeek = cal.getTime();
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStringFirstDay = df.format(firstDayOfWeek);
+        String dateStringLastDay = df.format(lastDayOfWeek);
 
         String rawQuery = "SELECT " + NotificationItem.FIELD_PACKAGE_NAME
                 + ", COUNT(*) FROM " + NotificationItem.FIELD_TABLE_NAME
-                + " WHERE strftime('%W-%Y'," + NotificationItem.FIELD_DATE + ") = '" + dateString + "'"
+                + " WHERE strftime('%Y-%m-%d'," + NotificationItem.FIELD_DATE + ") >= '" + dateStringFirstDay + "'"
+                + " AND strftime('%Y-%m-%d'," + NotificationItem.FIELD_DATE + ") <= '" + dateStringLastDay + "'"
                 + " AND " + NotificationItem.FIELD_PACKAGE_NAME + " IN "
                 + " (SELECT  " + Application.FIELD_PACKAGE_NAME
                 + " FROM " + Application.FIELD_TABLE_NAME
