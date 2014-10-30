@@ -109,7 +109,6 @@ public abstract class HistoryFragment extends Fragment {
             BarData data = new BarData(xVals, dataSet);
             chart.setData(data);
             listHistory.addHeaderView(chart, null, false);
-            listHistory.setBackgroundColor(getResources().getColor(android.R.color.holo_green_dark));
         } catch (SQLException e) {
             e.printStackTrace();
         }

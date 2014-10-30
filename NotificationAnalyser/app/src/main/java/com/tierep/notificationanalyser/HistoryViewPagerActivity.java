@@ -3,35 +3,25 @@ package com.tierep.notificationanalyser;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 
 /**
  * Created by pieter on 18/10/14.
  */
 public class HistoryViewPagerActivity extends DrawerActivity {
-    private HistoryPagerAdapter historyPagerAdapter;
-    private ViewPager mViewPager;
+    HistoryDailyFragment dailyFrag;
+    HistoryWeeklyFragment weeklyFrag;
+    HistoryMonthlyFragment monthlyFrag;
 
     public HistoryViewPagerActivity() {
         super(R.layout.viewpager_history);
+        dailyFrag = new HistoryDailyFragment();
+        weeklyFrag = new HistoryWeeklyFragment();
+        monthlyFrag = new HistoryMonthlyFragment();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        historyPagerAdapter = new HistoryPagerAdapter(getFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setOffscreenPageLimit(3);
-        mViewPager.setAdapter(historyPagerAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                getActionBar().setSelectedNavigationItem(position);
-            }
-        });
 
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -39,7 +29,15 @@ public class HistoryViewPagerActivity extends DrawerActivity {
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             @Override
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-                setCurrentItem(tab.getPosition());
+                //setCurrentItem(tab.getPosition());
+                int position = tab.getPosition();
+                if (position == 0) {
+                    fragmentTransaction.replace(R.id.frame_layout, dailyFrag);
+                } else if(position == 1) {
+                    fragmentTransaction.replace(R.id.frame_layout, weeklyFrag);
+                } else if(position == 2) {
+                    fragmentTransaction.replace(R.id.frame_layout, monthlyFrag);
+                }
             }
 
             @Override
@@ -64,9 +62,5 @@ public class HistoryViewPagerActivity extends DrawerActivity {
     @Override
     public void onResume() {
         super.onResume();
-    }
-
-    private void setCurrentItem(int position) {
-        mViewPager.setCurrentItem(position);
     }
 }

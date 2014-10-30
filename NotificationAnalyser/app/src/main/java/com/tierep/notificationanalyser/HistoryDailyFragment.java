@@ -17,10 +17,4 @@ public class HistoryDailyFragment extends HistoryFragment {
     protected List<NotificationAppView> getListViewDate(Date date) throws SQLException {
         return this.getDatabaseHelper().getNotificationDao().getOverviewDay(date);
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        this.showDayListView(new Date());
-    }
 }
