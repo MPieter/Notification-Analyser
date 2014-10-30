@@ -36,6 +36,9 @@ import java.util.List;
 public abstract class HistoryFragment extends Fragment {
     private DatabaseHelper databaseHelper = null;
     private Date currentSelectedDate = null;
+    private int selectedXIndex;
+    private int selectedDataSetIndex;
+    private BarChart chart;
     protected Paint paintWhite = new Paint();
 
     public HistoryFragment() {
@@ -66,7 +69,7 @@ public abstract class HistoryFragment extends Fragment {
             }
         });
 
-        BarChart chart = new BarChart(getActivity());
+        chart = new BarChart(getActivity());
         chart.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, ((int) getResources().getDimension(R.dimen.bar_chart_height))));
         chart.setDrawBarShadow(false);
         chart.setDrawLegend(false);
@@ -88,6 +91,8 @@ public abstract class HistoryFragment extends Fragment {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex) {
                 showDayListView((Date) e.getData());
+                selectedXIndex = e.getXIndex();
+                selectedDataSetIndex = dataSetIndex;
             }
 
             @Override
@@ -121,6 +126,7 @@ public abstract class HistoryFragment extends Fragment {
         ListView listHistory = (ListView) this.getActivity().findViewById(R.id.list_view_history);
         if (currentSelectedDate != null) {
             showDayListView(currentSelectedDate);
+            chart.highlightValue(selectedXIndex, selectedDataSetIndex);
         } else {
             listHistory.setAdapter(new NotificationAdapter(this.getActivity(), new LinkedList<NotificationAppView>()));
         }
@@ -150,6 +156,7 @@ public abstract class HistoryFragment extends Fragment {
     protected abstract SimpleDateFormat getDateFormat();
 
     protected void showDayListView(Date date) {
+        this.currentSelectedDate = date;
         ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
         try {
             List<NotificationAppView> objects = this.getListViewDate(date);
