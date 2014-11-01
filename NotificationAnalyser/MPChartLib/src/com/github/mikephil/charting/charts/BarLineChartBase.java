@@ -63,8 +63,8 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
     /** contains the current scale factor of the y-axis */
     protected float mScaleY = 1f;
 
-    /** holds the maximum scale factor of the y-axis, default 10f */
-    protected float mMaxScaleY = 10f;
+    /** holds the maximum scale factor of the y-axis, default 12f */
+    protected float mMaxScaleY = 12f;
 
     /** the width of the grid lines */
     protected float mGridWidth = 1f;
@@ -251,7 +251,8 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
 
         canvas.drawBitmap(mDrawBitmap, 0, 0, mDrawPaint);
 
-        Log.i(LOG_TAG, "DrawTime: " + (System.currentTimeMillis() - starttime) + " ms");
+        if (mLogEnabled)
+            Log.i(LOG_TAG, "DrawTime: " + (System.currentTimeMillis() - starttime) + " ms");
     }
 
     /**
@@ -285,7 +286,8 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
 
         prepareMatrixOffset();
 
-        Log.i(LOG_TAG, "Matrices prepared.");
+        if (mLogEnabled)
+            Log.i(LOG_TAG, "Matrices prepared.");
     }
 
     /**
@@ -343,10 +345,7 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
         float legendRight = 0f, legendBottom = 0f;
 
         // setup offsets for legend
-        if (mDrawLegend) {
-
-            if (mLegend == null)
-                return;
+        if (mDrawLegend && mLegend != null && mLegend.getPosition() != LegendPosition.NONE) {
 
             if (mLegend.getPosition() == LegendPosition.RIGHT_OF_CHART
                     || mLegend.getPosition() == LegendPosition.RIGHT_OF_CHART_CENTER) {
@@ -434,9 +433,13 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
         mOffsetLeft = Math.max(min, yleft);
         mOffsetRight = Math.max(min, yright + legendRight);
 
-        // those offsets are equal for legend and other chart, just apply them
-        mLegend.setOffsetTop(mOffsetTop);
-        mLegend.setOffsetLeft(mOffsetLeft);
+        
+        if(mLegend != null) {
+         
+            // those offsets are equal for legend and other chart, just apply them
+            mLegend.setOffsetTop(mOffsetTop + min / 3f);
+            mLegend.setOffsetLeft(mOffsetLeft);
+        }
 
         prepareContentRect();
 
@@ -489,13 +492,16 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
             // additional handling for space (default 15% space)
             // float space = Math.abs(mDeltaY / 100f * 15f);
             float space = Math
-                    .abs(Math.max(Math.abs(mYChartMax), Math.abs(mYChartMin)) / 100f * 15f);
-            if (Math.abs(mYChartMax) - Math.abs(mYChartMin) < 0.00001f) {
+                    .abs(Math.abs(Math.max(Math.abs(mYChartMax), Math.abs(mYChartMin))) / 100f * 20f);
+            
+            if (Math.abs(mYChartMax - mYChartMin) < 0.00001f) {
                 if (Math.abs(mYChartMax) < 10f)
                     space = 1f;
                 else
-                    space = Math.abs(mYChartMax / 100f * 15f);
+                    space = Math.abs(mYChartMax / 100f * 20f);
             }
+            
+            Log.i(LOG_TAG, "Space: " + space);
 
             if (mStartAtZero) {
 
@@ -1923,7 +1929,8 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
     }
 
     /**
-     * sets the maximum scale factor for the y-axis. Default 7f, min 1f, max 20f
+     * sets the maximum scale factor for the y-axis. Default 12f, min 1f, max
+     * unlimited
      * 
      * @param factor
      */
@@ -1931,8 +1938,6 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleData<? exte
 
         if (factor < 1f)
             factor = 1f;
-        if (factor > 20f)
-            factor = 20f;
 
         mMaxScaleY = factor;
     }
