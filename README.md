@@ -6,3 +6,7 @@ An Android application to analyse your notification history. It shows the number
 This application is available in the [Google Play Store](https://play.google.com/store/apps/details?id=com.tierep.notificationanalyser).
 
 Special thanks to Phillip J. for the amazing charting library used in this project: [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart).
+
+License
+=======
+This repository is under the MIT license, have a look at the `LICENSE` file.
