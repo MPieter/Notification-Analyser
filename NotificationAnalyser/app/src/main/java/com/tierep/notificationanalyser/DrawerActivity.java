@@ -7,7 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
 
 public class DrawerActivity extends Activity implements NotificationAccessDialogFragment.NotificationAccessDialogFragmentListener {
     private DrawerLayout drawerLayout;
@@ -58,7 +57,6 @@ public class DrawerActivity extends Activity implements NotificationAccessDialog
         drawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
-                R.drawable.ic_navigation_drawer,
                 R.string.drawer_open,
                 R.string.drawer_close) {
             @Override
