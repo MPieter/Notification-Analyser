@@ -41,14 +41,14 @@ public class NotificationListener extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        if (sbn.isOngoing() == false) {
+        if (!sbn.isOngoing()) {
             storeNotification(sbn);
         }
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        if (sbn.isOngoing() == true) {
+        if (sbn.isOngoing()) {
             storeNotification(sbn);
         }
     }

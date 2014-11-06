@@ -101,12 +101,12 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
         GenericRawResults<String[]> rawResults = this.queryRaw(rawQuery);
         List<String[]> results = rawResults.getResults();
 
-        for (int i = 0; i < results.size(); i++) {
-            int ntfCount = Integer.parseInt(results.get(i)[1]);
+        for (String[] result : results) {
+            int ntfCount = Integer.parseInt(result[1]);
             maxCount = ntfCount > maxCount ? ntfCount : maxCount;
         }
-        for (int i = 0; i < results.size(); i++) {
-            list.add(new NotificationAppView(results.get(i)[0], Integer.parseInt(results.get(i)[1]), maxCount));
+        for (String[] result : results) {
+            list.add(new NotificationAppView(result[0], Integer.parseInt(result[1]), maxCount));
         }
         return list;
     }
@@ -161,10 +161,10 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
         List<String[]> results = rawResults.getResults();
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-        for (int i = 0; i < results.size(); i++) {
+        for (String[] result : results) {
             try {
-                Date date = formatter.parse(results.get(i)[0]);
-                Integer notifications = Integer.parseInt(results.get(i)[1]);
+                Date date = formatter.parse(result[0]);
+                Integer notifications = Integer.parseInt(result[1]);
                 list.add(new NotificationDateView(date, notifications));
             } catch (ParseException e) {
                 e.printStackTrace();

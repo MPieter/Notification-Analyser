@@ -3,12 +3,10 @@ package com.tierep.notificationanalyser;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,12 +34,6 @@ public class DrawerActivity extends Activity implements NotificationAccessDialog
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
-        try {
-            ActivityInfo ai = this.getPackageManager().getActivityInfo(this.getComponentName(), 0);
-            String appLabel = ai.loadLabel(getPackageManager()).toString();
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
         currentTitle = getTitle().toString();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.drawer_list);

@@ -5,12 +5,15 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 /**
+ * Activity responsible for the view of the history. It displays history fragments for day, week and
+ * month view with the use of an action bar.
+ *
  * Created by pieter on 18/10/14.
  */
 public class HistoryViewPagerActivity extends DrawerActivity {
-    HistoryDailyFragment dailyFrag;
-    HistoryWeeklyFragment weeklyFrag;
-    HistoryMonthlyFragment monthlyFrag;
+    private HistoryDailyFragment dailyFrag;
+    private HistoryWeeklyFragment weeklyFrag;
+    private HistoryMonthlyFragment monthlyFrag;
 
     public HistoryViewPagerActivity() {
         super(R.layout.viewpager_history);

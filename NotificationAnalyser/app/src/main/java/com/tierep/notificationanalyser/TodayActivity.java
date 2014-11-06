@@ -61,8 +61,8 @@ public class TodayActivity extends DrawerActivity {
         }
 
         int totalCount = 0;
-        for (int i = 0; i < list.size(); i++) {
-            totalCount += list.get(i).Notifications;
+        for (NotificationAppView aList : list) {
+            totalCount += aList.Notifications;
         }
 
         TextView titleCounter = (TextView) findViewById(R.id.title_counter);

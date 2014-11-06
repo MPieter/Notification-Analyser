@@ -19,7 +19,7 @@
         <TextView
             android:id="@+id/about_app_name"
             android:text="@string/app_name"
-            android:textSize="26dp"
+            android:textSize="26sp"
             style="@style/about_component"/>
 
         <ImageView
