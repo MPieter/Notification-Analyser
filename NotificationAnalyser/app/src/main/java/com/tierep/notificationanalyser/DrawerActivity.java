@@ -76,17 +76,11 @@ public class DrawerActivity extends Activity implements NotificationAccessDialog
     private void selectItem(int position) {
         Intent intent = null;
         if (position == 0) {
-            if (this.getClass() != TodayActivity.class){
-                intent = new Intent(this, TodayActivity.class);
-            }
+            intent = new Intent(this, TodayActivity.class);
         } else if (position == 1) {
-            if (this.getClass() != HistoryViewPagerActivity.class) {
-                intent = new Intent(this, HistoryViewPagerActivity.class);
-            }
+            intent = new Intent(this, HistoryViewPagerActivity.class);
         } else if (position == 2) {
-            if (this.getClass() != AboutActivity.class) {
-                intent = new Intent(this, AboutActivity.class);
-            }
+            intent = new Intent(this, AboutActivity.class);
         }
 
         drawerList.setItemChecked(position, true);
