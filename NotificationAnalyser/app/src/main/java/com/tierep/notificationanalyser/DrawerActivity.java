@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
@@ -17,11 +18,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class DrawerActivity extends Activity implements NotificationAccessDialogFragment.NotificationAccessDialogFragmentListener {
+    private static final String STATE_ITEM_SELECT = "selectedItem";
+
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private String[] drawerItems;
     private ActionBarDrawerToggle drawerToggle;
     private String currentTitle;
+    private int selectedItem;
 
     private TodayFragment todayFragment;
     private HistoryViewPagerFragment historyFragment;
@@ -75,7 +79,12 @@ public class DrawerActivity extends Activity implements NotificationAccessDialog
             DialogFragment dialog = new NotificationAccessDialogFragment();
             dialog.show(getFragmentManager(), "notificationAccessDialog");
         }
-        selectItem(0);
+        if (savedInstanceState != null) {
+            selectedItem = savedInstanceState.getInt(STATE_ITEM_SELECT);
+        } else {
+            selectedItem = 0;
+        }
+        selectItem(selectedItem);
         //new DemoDataGenerator(this).Generate(true);
     }
 
@@ -90,6 +99,10 @@ public class DrawerActivity extends Activity implements NotificationAccessDialog
         } else if (position == 2) {
             ft.replace(R.id.frame_layout, aboutFragment);
             currentTitle = getResources().getString(R.string.title_activity_about);
+        }
+        selectedItem = position;
+        if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            getActionBar().setTitle(currentTitle);
         }
 
         drawerList.setItemChecked(position, true);
@@ -147,5 +160,12 @@ public class DrawerActivity extends Activity implements NotificationAccessDialog
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         // Do nothing
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(STATE_ITEM_SELECT, selectedItem);
+
+        super.onSaveInstanceState(outState);
     }
 }
