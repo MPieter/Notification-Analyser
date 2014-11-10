@@ -4,7 +4,7 @@
     android:id="@+id/drawer_layout"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context="com.tierep.notificationanalyser.AboutActivity">
+    tools:context="com.tierep.notificationanalyser.AboutFragment">
     <!-- The main content view -->
     <LinearLayout
         android:layout_width="match_parent"

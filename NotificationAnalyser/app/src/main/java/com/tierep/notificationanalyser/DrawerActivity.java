@@ -2,6 +2,7 @@ package com.tierep.notificationanalyser;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -21,16 +22,21 @@ public class DrawerActivity extends Activity implements NotificationAccessDialog
     private String[] drawerItems;
     private ActionBarDrawerToggle drawerToggle;
     private String currentTitle;
-    private int layoutId;
 
-    public DrawerActivity(int layoutId) {
-        this.layoutId = layoutId;
+    private TodayFragment todayFragment;
+    private HistoryViewPagerFragment historyFragment;
+    private AboutFragment aboutFragment;
+
+    public DrawerActivity() {
+        todayFragment = new TodayFragment();
+        historyFragment = new HistoryViewPagerFragment();
+        aboutFragment = new AboutFragment();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(layoutId);
+        setContentView(R.layout.activity_drawer);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
@@ -69,23 +75,26 @@ public class DrawerActivity extends Activity implements NotificationAccessDialog
             DialogFragment dialog = new NotificationAccessDialogFragment();
             dialog.show(getFragmentManager(), "notificationAccessDialog");
         }
-
+        selectItem(0);
         //new DemoDataGenerator(this).Generate(true);
     }
 
     private void selectItem(int position) {
-        Intent intent = null;
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
         if (position == 0) {
-            intent = new Intent(this, TodayActivity.class);
+            ft.replace(R.id.frame_layout, todayFragment);
+            currentTitle = getResources().getString(R.string.title_fragment_today);
         } else if (position == 1) {
-            intent = new Intent(this, HistoryViewPagerActivity.class);
+            ft.replace(R.id.frame_layout, historyFragment);
+            currentTitle = getResources().getString(R.string.title_fragment_history);
         } else if (position == 2) {
-            intent = new Intent(this, AboutActivity.class);
+            ft.replace(R.id.frame_layout, aboutFragment);
+            currentTitle = getResources().getString(R.string.title_activity_about);
         }
 
         drawerList.setItemChecked(position, true);
         drawerLayout.closeDrawer(drawerList);
-        if (intent != null) startActivity(intent);
+        ft.commit();
     }
 
     @Override

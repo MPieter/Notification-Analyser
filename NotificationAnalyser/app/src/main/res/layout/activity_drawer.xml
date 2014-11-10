@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context="com.tierep.notificationanalyser.TodayActivity">
+    tools:context="com.tierep.notificationanalyser.DrawerActivity">
     <!-- The main content view -->
     <FrameLayout
         android:id="@+id/frame_layout"
@@ -17,4 +17,3 @@
         android:id="@+id/drawer_list"
         style="@style/list_view_drawer"/>
 </android.support.v4.widget.DrawerLayout>
-

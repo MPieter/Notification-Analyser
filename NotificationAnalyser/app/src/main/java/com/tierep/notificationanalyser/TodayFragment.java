@@ -1,8 +1,13 @@
 package com.tierep.notificationanalyser;
 
+import android.app.ActionBar;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,35 +21,43 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class TodayActivity extends DrawerActivity {
+public class TodayFragment extends Fragment {
     private DatabaseHelper databaseHelper = null;
-
-    public TodayActivity() {
-        super(R.layout.activity_today);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        View viewHeader = getLayoutInflater().inflate(R.layout.list_header_day_count, null);
+        ActionBar actionBar = getActivity().getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+    }
 
-        ListView listView = (ListView) findViewById(R.id.list_view);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        View main = inflater.inflate(R.layout.fragment_today, null);
+        View viewHeader = inflater.inflate(R.layout.list_header_day_count, null);
+
+        ListView listView = (ListView) main.findViewById(R.id.list_view);
         listView.addHeaderView(viewHeader, null, false);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(TodayActivity.this, AppDetail.class);
+                Intent intent = new Intent(getActivity(), AppDetail.class);
                 NotificationAppView clickedApp = (NotificationAppView) adapterView.getAdapter().getItem(i);
                 intent.putExtra(Intent.EXTRA_SUBJECT, clickedApp.AppName);
                 startActivity(intent);
             }
         });
+
+        return main;
     }
 
     public DatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+            databaseHelper = OpenHelperManager.getHelper(getActivity(), DatabaseHelper.class);
         }
         return databaseHelper;
     }
@@ -65,18 +78,18 @@ public class TodayActivity extends DrawerActivity {
             totalCount += aList.Notifications;
         }
 
-        TextView titleCounter = (TextView) findViewById(R.id.title_counter);
+        TextView titleCounter = (TextView) getActivity().findViewById(R.id.title_counter);
         titleCounter.setText(Integer.toString(totalCount));
-        TextView titleCounterSuffix = (TextView) findViewById(R.id.title_counter_suffix);
+        TextView titleCounterSuffix = (TextView) getActivity().findViewById(R.id.title_counter_suffix);
         if (totalCount == 1) {
             titleCounterSuffix.setText(R.string.title_counter_suffix_single);
         } else {
             titleCounterSuffix.setText(R.string.title_counter_suffix_plural);
         }
 
-        NotificationAdapter adapter = new NotificationAdapter(this, list);
+        NotificationAdapter adapter = new NotificationAdapter(getActivity(), list);
 
-        ListView listView = (ListView) findViewById(R.id.list_view);
+        ListView listView = (ListView) getActivity().findViewById(R.id.list_view);
         listView.setAdapter(adapter);
     }
 
