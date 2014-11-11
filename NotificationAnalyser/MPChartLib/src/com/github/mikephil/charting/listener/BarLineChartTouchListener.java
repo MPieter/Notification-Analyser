@@ -111,10 +111,11 @@ public class BarLineChartTouchListener<T extends BarLineChartBase<? extends BarL
                         if (mChart.isPinchZoomEnabled()) {
                             mTouchMode = PINCH_ZOOM;
                         } else {
-                            if (mSavedXDist > mSavedYDist)
-                                mTouchMode = X_ZOOM;
-                            else
-                                mTouchMode = Y_ZOOM;
+                            mTouchMode = NONE;
+//                            if (mSavedXDist > mSavedYDist)
+//                                mTouchMode = X_ZOOM;
+//                            else
+//                                mTouchMode = Y_ZOOM;
                         }
                     }
 
