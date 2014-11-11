@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -77,10 +76,11 @@ public abstract class HistoryFragment extends Fragment {
         chart.setDrawGridBackground(false);
         chart.setDrawHorizontalGrid(false);
         chart.setDrawVerticalGrid(false);
-        chart.setPaint(paintWhite, Chart.PAINT_XLABEL);
         chart.setDrawXLabels(true);
         chart.setDrawYLabels(false);
         chart.getXLabels().setCenterXLabelText(true);
+        chart.setValueTextColor(Color.WHITE);
+        chart.setPinchZoom(false);
         chart.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
@@ -100,7 +100,14 @@ public abstract class HistoryFragment extends Fragment {
 
             }
         });
-        chart.setValueTextColor(Color.WHITE);
+        listHistory.addHeaderView(chart, null, false);
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ListView listHistory = (ListView) this.getActivity().findViewById(R.id.list_view_history);
         try {
             List<NotificationDateView> rawData = this.getChartData(14);
             ArrayList<String> xVals = new ArrayList<String>(rawData.size());
@@ -113,17 +120,11 @@ public abstract class HistoryFragment extends Fragment {
             BarDataSet dataSet = new BarDataSet(yVals, "test");
             BarData data = new BarData(xVals, dataSet);
             chart.setData(data);
-            listHistory.addHeaderView(chart, null, false);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return view;
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        ListView listHistory = (ListView) this.getActivity().findViewById(R.id.list_view_history);
+
         if (currentSelectedDate != null) {
             showDayListView(currentSelectedDate);
             chart.highlightValue(selectedXIndex, selectedDataSetIndex);
