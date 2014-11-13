@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Notification Analyser</string>
+    <string name="action_ignored_apps">Ignorované aplikace</string>
+    <string name="title_counter_suffix_single">Upozornění</string>
+    <string name="title_counter_suffix_plural">Upozornění</string>
+    <string name="title_fragment_today">Dnes</string>
+    <string name="title_fragment_history">Historie</string>
+    <string name="title_activity_app_detail">Notification Analyser</string>
+    <string name="app_detail_ignore">Ignorovat</string>
+    <string name="NotificationAccessDialogFragment_Confirm">OK</string>
+    <string name="NotificationAccessDialogFragment_Cancel">Zrušit</string>
+    <string name="NotificationAccessDialogFragment_Message">        Tato aplikace potřebuje pro správnou funkčnost přístup k upozorněním, což není momentálně povoleno. Chcete teď přístup povolit?</string>
+    <string name="NotificationAccessDialogFragment_Title">Přístup k upozorněním</string>
+    <string name="title_activity_ignored__apps">Ignorované aplikace</string>
+    <string name="ignored_apps_description">Toto je seznam aplikací ze kterých jsou upozornění ve statistikách ignorována. Odstraňte aplikaci ze seznamu, pro zahrnutí jejích upozornění do statistik.</string>
+    <string name="ignored_apps_no_items">Momentálně nejsou ignorovány žádné aplikace.</string>
+    <string name="history_empty">Historie zde bude zobrazena poté, co obdržíte nějaká upozornění.</string>
+
+    <string-array name="navigation_drawer_list">
+        <item>Dnes</item>
+        <item>Historie</item>
+        <item>O aplikaci</item>
+    </string-array>
+
+    <string name="drawer_open">Otevřít navigační lištu</string>
+    <string name="drawer_close">Zavřít navigační lištu</string>
+    <string name="history_daily">Denně</string>
+    <string name="history_weekly">Týdně</string>
+    <string name="history_monthly">Měsíčně</string>
+    <string name="title_activity_about">O aplikaci</string>
+    <string name="about_author">Pieter Meiresone</string>
+    <string name="about_location">Made in Belgium</string>
+
+</resources>
