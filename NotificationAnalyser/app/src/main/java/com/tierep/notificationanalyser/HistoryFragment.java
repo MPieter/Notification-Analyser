@@ -109,7 +109,7 @@ public abstract class HistoryFragment extends Fragment {
         super.onResume();
         ListView listHistory = (ListView) this.getActivity().findViewById(R.id.list_view_history);
         try {
-            List<NotificationDateView> rawData = this.getChartData(14);
+            List<NotificationDateView> rawData = this.getChartData(getResources().getInteger(R.integer.chart_items));
             ArrayList<String> xVals = new ArrayList<String>(rawData.size());
             ArrayList<BarEntry> yVals = new ArrayList<BarEntry>(rawData.size());
             for (int i = 0; i < rawData.size(); i++) {
