@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".DrawerActivity"
+            android:name=".ui.DrawerActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop">
             <intent-filter android:label="@string/app_name">
@@ -32,14 +32,14 @@
         </service>
 
         <activity
-            android:name="com.tierep.notificationanalyser.AppDetail"
+            android:name=".ui.AppDetail"
             android:label="@string/title_activity_app_detail"
-            android:parentActivityName=".DrawerActivity" >
+            android:parentActivityName=".ui.DrawerActivity" >
         </activity>
         <activity
-            android:name="com.tierep.notificationanalyser.Ignored_Apps"
+            android:name=".ui.IgnoredApps"
             android:label="@string/title_activity_ignored__apps"
-            android:parentActivityName=".DrawerActivity" >
+            android:parentActivityName=".ui.DrawerActivity" >
         </activity>
     </application>
 
