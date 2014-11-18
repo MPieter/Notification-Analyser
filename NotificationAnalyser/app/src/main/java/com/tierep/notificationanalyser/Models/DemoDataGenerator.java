@@ -17,6 +17,8 @@ import java.util.Random;
  * Data is generated for the last 30 days, for a total of 500 notifications distributed random over
  * packages of some common apps.
  *
+ * For displaying the data correctly in the app, it is required that these common apps are installed.
+ *
  * Created by pieter on 04/10/14.
  */
 public class DemoDataGenerator {
@@ -28,15 +30,23 @@ public class DemoDataGenerator {
 
     public DemoDataGenerator(Context context) {
         this.context = context;
+        applications.add(new Application("com.google.android.talk", false));
         applications.add(new Application("com.whatsapp", false));
         applications.add(new Application("com.facebook.orca", false));
-        applications.add(new Application("com.android.email", false));
-        applications.add(new Application("com.google.android.apps.maps", false));
+        applications.add(new Application("com.facebook.katana", false));
+        applications.add(new Application("com.instagram.android", false));
+        applications.add(new Application("com.twitter.android", false));
+        applications.add(new Application("com.joelapenna.foursquared", false));
+        applications.add(new Application("com.google.android.gm", false));
+        applications.add(new Application("com.google.android.apps.plus", false));
         applications.add(new Application("com.snapchat.android", false));
         applications.add(new Application("com.soundcloud.android", false));
+        applications.add(new Application("org.telegram.messenger", false));
+        applications.add(new Application("com.foursquare.robin", false));
+        applications.add(new Application("com.linkedin.android", false));
 
         Calendar cal = Calendar.getInstance();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 50; i++) {
             dates.add(cal.getTime());
             cal.add(Calendar.HOUR, -24);
         }
@@ -56,7 +66,7 @@ public class DemoDataGenerator {
                 daoApp.create(app);
             }
 
-            for (int i = 0; i < 500; i++) {
+            for (int i = 0; i < 5000; i++) {
                 NotificationItem ntf = new NotificationItem(GenerateApplication().getPackageName(), GenerateDate());
                 daoNtf.create(ntf);
             }
