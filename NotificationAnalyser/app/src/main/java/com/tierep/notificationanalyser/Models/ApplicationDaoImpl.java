@@ -1,4 +1,4 @@
-package com.tierep.notificationanalyser.Models;
+package com.tierep.notificationanalyser.models;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.support.ConnectionSource;

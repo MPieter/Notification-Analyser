@@ -1,4 +1,7 @@
-package com.tierep.notificationanalyser;
+package com.tierep.notificationanalyser.ui;
+
+import com.tierep.notificationanalyser.NotificationAppView;
+import com.tierep.notificationanalyser.NotificationDateView;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;

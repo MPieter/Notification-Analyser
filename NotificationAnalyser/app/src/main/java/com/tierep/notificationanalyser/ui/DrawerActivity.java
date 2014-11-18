@@ -1,4 +1,4 @@
-package com.tierep.notificationanalyser;
+package com.tierep.notificationanalyser.ui;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -16,6 +16,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.tierep.notificationanalyser.NotificationListener;
+import com.tierep.notificationanalyser.R;
 
 public class DrawerActivity extends Activity implements NotificationAccessDialogFragment.NotificationAccessDialogFragmentListener {
     private static final String STATE_ITEM_SELECT = "selectedItem";
@@ -140,7 +143,7 @@ public class DrawerActivity extends Activity implements NotificationAccessDialog
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_ignored_apps) {
-            Intent intent = new Intent(this, Ignored_Apps.class);
+            Intent intent = new Intent(this, IgnoredApps.class);
             startActivity(intent);
             return true;
         }

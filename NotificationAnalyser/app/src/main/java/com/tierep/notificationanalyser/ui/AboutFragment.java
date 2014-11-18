@@ -1,4 +1,4 @@
-package com.tierep.notificationanalyser;
+package com.tierep.notificationanalyser.ui;
 
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.tierep.notificationanalyser.R;
 
 
 public class AboutFragment extends Fragment {

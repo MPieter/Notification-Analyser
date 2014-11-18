@@ -1,4 +1,4 @@
-package com.tierep.notificationanalyser;
+package com.tierep.notificationanalyser.ui;
 
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -13,8 +13,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.tierep.notificationanalyser.Models.DatabaseHelper;
-import com.tierep.notificationanalyser.Models.NotificationItemDao;
+import com.tierep.notificationanalyser.NotificationAdapter;
+import com.tierep.notificationanalyser.NotificationAppView;
+import com.tierep.notificationanalyser.R;
+import com.tierep.notificationanalyser.models.DatabaseHelper;
+import com.tierep.notificationanalyser.models.NotificationItemDao;
 
 import java.sql.SQLException;
 import java.util.LinkedList;

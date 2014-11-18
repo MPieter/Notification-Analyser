@@ -1,4 +1,7 @@
-package com.tierep.notificationanalyser;
+package com.tierep.notificationanalyser.ui;
+
+import com.tierep.notificationanalyser.NotificationAppView;
+import com.tierep.notificationanalyser.NotificationDateView;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -8,17 +11,16 @@ import java.util.List;
 /**
  * Created by pieter on 25/10/14.
  */
-public class HistoryDailyFragment extends HistoryFragment {
-    protected SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM");
-
+public class HistoryMonthlyFragment extends HistoryFragment {
+    protected SimpleDateFormat dateFormat = new SimpleDateFormat("MMM");
     @Override
     protected List<NotificationDateView> getChartData(int items) throws SQLException {
-        return this.getDatabaseHelper().getNotificationDao().getSummaryLastDays(items);
+        return this.getDatabaseHelper().getNotificationDao().getSummaryLastMonths(items);
     }
 
     @Override
     protected List<NotificationAppView> getListViewDate(Date date) throws SQLException {
-        return this.getDatabaseHelper().getNotificationDao().getOverviewDay(date);
+        return this.getDatabaseHelper().getNotificationDao().getOverviewMonth(date);
     }
 
     /**

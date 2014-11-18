@@ -1,4 +1,4 @@
-package com.tierep.notificationanalyser;
+package com.tierep.notificationanalyser.ui;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -21,8 +21,12 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.interfaces.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ValueFormatter;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.tierep.notificationanalyser.Models.Application;
-import com.tierep.notificationanalyser.Models.DatabaseHelper;
+import com.tierep.notificationanalyser.NotificationAdapter;
+import com.tierep.notificationanalyser.NotificationAppView;
+import com.tierep.notificationanalyser.NotificationDateView;
+import com.tierep.notificationanalyser.R;
+import com.tierep.notificationanalyser.models.Application;
+import com.tierep.notificationanalyser.models.DatabaseHelper;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;

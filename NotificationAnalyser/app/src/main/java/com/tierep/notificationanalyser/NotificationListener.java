@@ -7,10 +7,10 @@ import android.service.notification.StatusBarNotification;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.tierep.notificationanalyser.Models.Application;
-import com.tierep.notificationanalyser.Models.ApplicationDao;
-import com.tierep.notificationanalyser.Models.DatabaseHelper;
-import com.tierep.notificationanalyser.Models.NotificationItem;
+import com.tierep.notificationanalyser.models.Application;
+import com.tierep.notificationanalyser.models.ApplicationDao;
+import com.tierep.notificationanalyser.models.DatabaseHelper;
+import com.tierep.notificationanalyser.models.NotificationItem;
 
 import java.sql.SQLException;
 import java.util.Date;

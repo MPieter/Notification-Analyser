@@ -1,4 +1,4 @@
-package com.tierep.notificationanalyser.Models;
+package com.tierep.notificationanalyser.models;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

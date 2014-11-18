@@ -1,6 +1,9 @@
 package com.tierep.notificationanalyser;
 
 /**
+ * A view used that is used for displaying an app as an item in a list to represent the number of
+ * notifications that app has delivered to the system.
+ *
  * Created by pieter on 17/09/14.
  */
 public class NotificationAppView {

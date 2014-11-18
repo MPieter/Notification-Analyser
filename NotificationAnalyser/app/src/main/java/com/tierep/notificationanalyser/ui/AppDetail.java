@@ -1,4 +1,4 @@
-package com.tierep.notificationanalyser;
+package com.tierep.notificationanalyser.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,9 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.tierep.notificationanalyser.Models.Application;
-import com.tierep.notificationanalyser.Models.ApplicationDao;
-import com.tierep.notificationanalyser.Models.DatabaseHelper;
+import com.tierep.notificationanalyser.R;
+import com.tierep.notificationanalyser.models.Application;
+import com.tierep.notificationanalyser.models.ApplicationDao;
+import com.tierep.notificationanalyser.models.DatabaseHelper;
 
 import java.sql.SQLException;
 
