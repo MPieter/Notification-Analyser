@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Notification Analyser</string>
+    <string name="action_ignored_apps">Genegeerde applicaties</string>
+    <string name="title_counter_suffix_single">Notificatie</string>
+    <string name="title_counter_suffix_plural">Notificaties</string>
+    <string name="title_fragment_today">Vandaag</string>
+    <string name="title_fragment_history">Geschiedenis</string>
+    <string name="title_activity_app_detail">Notification Analyser</string>
+    <string name="app_detail_ignore">Negeer</string>
+    <string name="NotificationAccessDialogFragment_Confirm">OK</string>
+    <string name="NotificationAccessDialogFragment_Message">Deze applicatie heeft toegang nodig tot u notificaties. Momenteel is dit niet het geval. Wilt u dit nu inschakelen?</string>
+    <string name="NotificationAccessDialogFragment_Title">Notificatie toegang</string>
+    <string name="title_activity_ignored__apps">Genegeerde applicaties</string>
+    <string name="ignored_apps_no_items">Er zijn momenteel geen genegeerde applicaties.</string>
+
+    <string-array name="navigation_drawer_list">
+        <item>Today</item>
+        <item>History</item>
+        <item>About</item>
+    </string-array>
+
+    <string name="drawer_open">Open navigatie balk</string>
+    <string name="drawer_close">Sluit navigatie balk</string>
+    <string name="history_daily">Dagelijks</string>
+    <string name="history_weekly">Wekelijks</string>
+    <string name="history_monthly">Maandelijks</string>
+    <string name="title_activity_about">Over</string>
+    <string name="about_author">Pieter Meiresone</string>
+    <string name="about_location">Made in Belgium</string>
+    <string name="NotificationAccessDialogFragment_Cancel">Annuleer</string>
+    <string name="history_empty">Uw geschiedenis zal hier verschijnen van zodra u notificaties hebt ontvangen.</string>
+    <string name="ignored_apps_description">Dit is een lijst van alle apps waarvan de notificaties genegeerd worden in de statistieken. Verwijder de app uit de lijst om de notificaties terug in rekening te nemen.</string>
+
+</resources>

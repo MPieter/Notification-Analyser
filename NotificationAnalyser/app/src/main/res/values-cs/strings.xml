@@ -11,7 +11,7 @@
     <string name="app_detail_ignore">Ignorovat</string>
     <string name="NotificationAccessDialogFragment_Confirm">OK</string>
     <string name="NotificationAccessDialogFragment_Cancel">Zrušit</string>
-    <string name="NotificationAccessDialogFragment_Message">        Tato aplikace potřebuje pro správnou funkčnost přístup k upozorněním, což není momentálně povoleno. Chcete teď přístup povolit?</string>
+    <string name="NotificationAccessDialogFragment_Message">Tato aplikace potřebuje pro správnou funkčnost přístup k upozorněním, což není momentálně povoleno. Chcete teď přístup povolit?</string>
     <string name="NotificationAccessDialogFragment_Title">Přístup k upozorněním</string>
     <string name="title_activity_ignored__apps">Ignorované aplikace</string>
     <string name="ignored_apps_description">Toto je seznam aplikací ze kterých jsou upozornění ve statistikách ignorována. Odstraňte aplikaci ze seznamu, pro zahrnutí jejích upozornění do statistik.</string>
