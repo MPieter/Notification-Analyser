@@ -13,13 +13,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.tierep.notificationanalyser.NotificationAdapter;
 import com.tierep.notificationanalyser.NotificationAppView;
+import com.tierep.notificationanalyser.NotificationAppViewAdapter;
 import com.tierep.notificationanalyser.R;
 import com.tierep.notificationanalyser.models.DatabaseHelper;
 import com.tierep.notificationanalyser.models.NotificationItemDao;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,7 +52,9 @@ public class TodayFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), AppDetail.class);
                 NotificationAppView clickedApp = (NotificationAppView) adapterView.getAdapter().getItem(i);
-                intent.putExtra(Intent.EXTRA_SUBJECT, clickedApp.AppName);
+                intent.putExtra(AppDetail.EXTRA_PACKAGENAME, clickedApp.AppName);
+                intent.putExtra(AppDetail.EXTRA_INTERVALTYPE, AppDetail.FLAG_VIEW_DAILY);
+                intent.putExtra(AppDetail.EXTRA_DATESTRING, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 startActivity(intent);
             }
         });
@@ -90,7 +94,7 @@ public class TodayFragment extends Fragment {
             titleCounterSuffix.setText(R.string.title_counter_suffix_plural);
         }
 
-        NotificationAdapter adapter = new NotificationAdapter(getActivity(), list);
+        NotificationAppViewAdapter adapter = new NotificationAppViewAdapter(getActivity(), list);
 
         ListView listView = (ListView) getActivity().findViewById(R.id.list_view);
         listView.setAdapter(adapter);

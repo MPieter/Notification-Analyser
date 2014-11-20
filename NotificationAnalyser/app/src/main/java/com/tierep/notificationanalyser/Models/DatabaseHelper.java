@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "notifications.db";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private ApplicationDao applicationDao = null;
     private NotificationItemDao notificationDao = null;
@@ -45,6 +45,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         if (oldVersion < 2) {
             // Do changes from version 1 to 2
+            try {
+                NotificationItemDao dao = getNotificationDao();
+                dao.executeRawNoArgs("ALTER TABLE " + NotificationItem.FIELD_TABLE_NAME + " ADD COLUMN " + NotificationItem.FIELD_MESSAGE + " TEXT");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
         }
 
         if (oldVersion < 3) {

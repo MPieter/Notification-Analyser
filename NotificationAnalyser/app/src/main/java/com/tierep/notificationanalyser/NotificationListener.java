@@ -1,6 +1,10 @@
 package com.tierep.notificationanalyser;
 
+import android.app.Notification;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
@@ -62,8 +66,42 @@ public class NotificationListener extends NotificationListenerService {
                 applicationDao.create(application);
             }
 
+            String appName = packageName;
+            try {
+                ApplicationInfo info = getPackageManager().getApplicationInfo(packageName, 0);
+                appName = getPackageManager().getApplicationLabel(info).toString();
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            String message = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                if (sbn.getNotification().extras != null) {
+                    message = sbn.getNotification().extras.getString(
+                            Notification.EXTRA_TITLE);
+                    if (message == null || "".equals(message)) {
+                        message = sbn.getNotification().extras.getString(
+                                Notification.EXTRA_TEXT);
+                    } else if (message.equals(appName)) {
+                        String otherMsg = sbn.getNotification().extras.getString(
+                                Notification.EXTRA_TEXT);
+                        if (otherMsg != null && !"".equals(otherMsg)) {
+                            message = otherMsg;
+                        }
+                    }
+                }
+            }
+
+            if (message == null || "".equals(message)) {
+                message = sbn.getNotification().tickerText.toString();
+            } else if (message.equals(appName)) {
+                String otherMsg = sbn.getNotification().tickerText.toString();
+                if (otherMsg != null && !"".equals(otherMsg)) {
+                    message = otherMsg;
+                }
+            }
+
             Dao<NotificationItem, Integer> dao = getDatabaseHelper().getNotificationDao();
-            NotificationItem newItem = new NotificationItem(packageName, new Date(sbn.getPostTime()));
+            NotificationItem newItem = new NotificationItem(packageName, new Date(sbn.getPostTime()), message);
             dao.create(newItem);
         } catch (SQLException e) {
             e.printStackTrace();

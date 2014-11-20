@@ -67,7 +67,7 @@ public class DemoDataGenerator {
             }
 
             for (int i = 0; i < 5000; i++) {
-                NotificationItem ntf = new NotificationItem(GenerateApplication().getPackageName(), GenerateDate());
+                NotificationItem ntf = new NotificationItem(GenerateApplication().getPackageName(), GenerateDate(), "");
                 daoNtf.create(ntf);
             }
         } catch (SQLException e) {

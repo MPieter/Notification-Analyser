@@ -93,6 +93,66 @@ public class NotificationItemDaoImpl extends BaseDaoImpl<NotificationItem, Integ
         return this.getOverviewGeneric(rawQuery);
     }
 
+    @Override
+    public List<NotificationItem> getOverviewAppDay(Date date, String appName) throws SQLException {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        Date dateMin = cal.getTime();
+        cal.add(Calendar.DATE, 1);
+        Date dateMax = cal.getTime();
+
+        return this.queryBuilder().where()
+                .eq(NotificationItem.FIELD_PACKAGE_NAME, appName).and()
+                .ge(NotificationItem.FIELD_DATE, dateMin).and()
+                .le(NotificationItem.FIELD_DATE, dateMax).query();
+    }
+
+    @Override
+    public List<NotificationItem> getOverviewAppWeek(Date date, String appName) throws SQLException {
+        Calendar cal = Calendar.getInstance();
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
+        cal.setTime(date);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+        Date firstDayOfWeek = cal.getTime();
+
+        cal.add(Calendar.DATE, 6);
+        Date lastDayOfWeek = cal.getTime();
+
+        return this.queryBuilder().where()
+                .eq(NotificationItem.FIELD_PACKAGE_NAME, appName).and()
+                .ge(NotificationItem.FIELD_DATE, firstDayOfWeek).and()
+                .le(NotificationItem.FIELD_DATE, lastDayOfWeek).query();
+    }
+
+    @Override
+    public List<NotificationItem> getOverviewAppMonth(Date date, String appName) throws SQLException {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        Date firstDayOfMonth = cal.getTime();
+
+        cal.add(Calendar.MONTH, 1);
+        Date lastDayOfMonth = cal.getTime();
+
+        return this.queryBuilder().where()
+                .eq(NotificationItem.FIELD_PACKAGE_NAME, appName).and()
+                .ge(NotificationItem.FIELD_DATE, firstDayOfMonth).and()
+                .le(NotificationItem.FIELD_DATE, lastDayOfMonth).query();
+    }
+
 
     private List<NotificationAppView> getOverviewGeneric(String rawQuery) throws SQLException {
         List<NotificationAppView> list = new LinkedList<NotificationAppView>();

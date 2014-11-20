@@ -16,10 +16,12 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
+ * An adapter for displaying NotificationAppView objects in a ListView.
+ *
  * Created by pieter on 17/09/14.
  */
-public class NotificationAdapter extends ArrayAdapter<NotificationAppView> {
-    public NotificationAdapter(Context context, List<NotificationAppView> objects) {
+public class NotificationAppViewAdapter extends ArrayAdapter<NotificationAppView> {
+    public NotificationAppViewAdapter(Context context, List<NotificationAppView> objects) {
         super(context, 0, objects);
         this.sort(new Comparator<NotificationAppView>() {
             @Override

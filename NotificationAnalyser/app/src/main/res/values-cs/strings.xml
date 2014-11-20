@@ -32,5 +32,6 @@
     <string name="title_activity_about">O aplikaci</string>
     <string name="about_author">Pieter Meiresone</string>
     <string name="about_location">Made in Belgium</string>
+    <string name="app_detail_no_message">Není k dispozici popis</string>
 
 </resources>

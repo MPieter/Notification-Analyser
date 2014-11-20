@@ -32,5 +32,6 @@
     <string name="NotificationAccessDialogFragment_Cancel">Annuleer</string>
     <string name="history_empty">Uw geschiedenis zal hier verschijnen van zodra u notificaties hebt ontvangen.</string>
     <string name="ignored_apps_description">Dit is een lijst van alle apps waarvan de notificaties genegeerd worden in de statistieken. Verwijder de app uit de lijst om de notificaties terug in rekening te nemen.</string>
+    <string name="app_detail_no_message">Geen omschrijving beschikbaar</string>
 
 </resources>

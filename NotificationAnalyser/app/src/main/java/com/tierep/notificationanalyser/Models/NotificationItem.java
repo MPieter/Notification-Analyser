@@ -16,6 +16,7 @@ public class NotificationItem {
     public static final String FIELD_KEY = "Id";
     public static final String FIELD_PACKAGE_NAME = "PackageName";
     public static final String FIELD_DATE = "Date";
+    public static final String FIELD_MESSAGE = "Message";
 
 
     @DatabaseField(columnName = FIELD_KEY, generatedId = true)
@@ -24,14 +25,17 @@ public class NotificationItem {
     private String PackageName;
     @DatabaseField(columnName = FIELD_DATE, canBeNull = false)
     private Date Date;
+    @DatabaseField(columnName = FIELD_MESSAGE, canBeNull = true)
+    private String Message;
 
     public NotificationItem() {
         //ORMLite needs a no-arg constructor.
     }
 
-    public NotificationItem(String packageName, Date date) {
+    public NotificationItem(String packageName, Date date, String message) {
         this.PackageName = packageName;
         this.Date = date;
+        this.Message = message;
     }
 
     public String getPackageName() {
@@ -48,5 +52,13 @@ public class NotificationItem {
 
     public void setDate(Date date) {
         this.Date = date;
+    }
+
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
     }
 }

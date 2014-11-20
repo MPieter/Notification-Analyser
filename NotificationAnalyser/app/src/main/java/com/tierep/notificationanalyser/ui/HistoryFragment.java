@@ -21,7 +21,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.interfaces.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ValueFormatter;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.tierep.notificationanalyser.NotificationAdapter;
+import com.tierep.notificationanalyser.NotificationAppViewAdapter;
 import com.tierep.notificationanalyser.NotificationAppView;
 import com.tierep.notificationanalyser.NotificationDateView;
 import com.tierep.notificationanalyser.R;
@@ -65,10 +65,8 @@ public abstract class HistoryFragment extends Fragment {
         listHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), AppDetail.class);
                 NotificationAppView clickedApp = (NotificationAppView) adapterView.getAdapter().getItem(i);
-                intent.putExtra(Intent.EXTRA_SUBJECT, clickedApp.AppName);
-                startActivity(intent);
+                startAppDetailActivity(clickedApp.AppName, currentSelectedDate);
             }
         });
 
@@ -133,7 +131,7 @@ public abstract class HistoryFragment extends Fragment {
             showDayListView(currentSelectedDate);
             chart.highlightValue(selectedXIndex, selectedDataSetIndex);
         } else {
-            listHistory.setAdapter(new NotificationAdapter(this.getActivity(), new LinkedList<NotificationAppView>()));
+            listHistory.setAdapter(new NotificationAppViewAdapter(this.getActivity(), new LinkedList<NotificationAppView>()));
         }
         try {
             ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
@@ -150,6 +148,8 @@ public abstract class HistoryFragment extends Fragment {
         }
     }
 
+    protected abstract void startAppDetailActivity(String appName, Date date);
+
     protected abstract List<NotificationDateView> getChartData(int items) throws SQLException;
 
     protected abstract List<NotificationAppView> getListViewDate(Date date) throws SQLException;
@@ -165,7 +165,7 @@ public abstract class HistoryFragment extends Fragment {
         ListView listView = (ListView) getActivity().findViewById(R.id.list_view_history);
         try {
             List<NotificationAppView> objects = this.getListViewDate(date);
-            listView.setAdapter(new NotificationAdapter(getActivity(), objects));
+            listView.setAdapter(new NotificationAppViewAdapter(getActivity(), objects));
         } catch (SQLException e) {
             e.printStackTrace();
         }
