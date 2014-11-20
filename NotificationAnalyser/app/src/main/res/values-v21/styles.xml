@@ -5,4 +5,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="list_view_drawer">
+        <item name="android:layout_gravity">start</item>
+        <item name="android:layout_width">@dimen/navigation_drawer_width</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">#424242</item>
+    </style>
 </resources>
