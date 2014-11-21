@@ -35,19 +35,28 @@ public class NotificationItemAdapter extends ArrayAdapter<NotificationItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.list_app_detail_el, null);
-        TextView txtMessage = (TextView) view.findViewById(R.id.app_detail_message);
-        TextView txtDate = (TextView) view.findViewById(R.id.app_detail_date);
 
+        View view = convertView;
+        ViewHolder holder;
+
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.list_app_detail_el, null);
+            holder = new ViewHolder();
+            holder.txtMessage = (TextView) view.findViewById(R.id.app_detail_message);
+            holder.txtDate = (TextView) view.findViewById(R.id.app_detail_date);
+            view.setTag(holder);
+        } else {
+            holder = (ViewHolder) view.getTag();
+        }
 
         NotificationItem item = this.getItem(position);
         String message = item.getMessage();
         if (message == null || "".equals(message)) {
             message = getContext().getResources().getString(R.string.app_detail_no_message);
         }
-        txtMessage.setText(message);
-        txtDate.setText(formatDate(item.getDate()));
+        holder.txtMessage.setText(message);
+        holder.txtDate.setText(formatDate(item.getDate()));
 
         return view;
     }
@@ -60,5 +69,10 @@ public class NotificationItemAdapter extends ArrayAdapter<NotificationItem> {
         } else {
             return dateFormatOlder.format(date);
         }
+    }
+
+    private static class ViewHolder {
+        TextView txtMessage;
+        TextView txtDate;
     }
 }

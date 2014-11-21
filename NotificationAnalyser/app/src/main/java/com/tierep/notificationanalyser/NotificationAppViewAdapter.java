@@ -33,14 +33,24 @@ public class NotificationAppViewAdapter extends ArrayAdapter<NotificationAppView
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.list_element, null);
-        TextView appName = (TextView) view.findViewById(R.id.app_name);
-        TextView appCount = (TextView) view.findViewById(R.id.app_count);
-        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.app_progress_bar);
-        ImageView imageView = (ImageView) view.findViewById(R.id.app_image);
 
-        PackageManager packageManager = view.getContext().getPackageManager();
+        View view = convertView;
+        ViewHolder holder;
+
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.list_element, null);
+            holder = new ViewHolder();
+            holder.appName = (TextView) view.findViewById(R.id.app_name);
+            holder.appCount = (TextView) view.findViewById(R.id.app_count);
+            holder.progressBar = (ProgressBar) view.findViewById(R.id.app_progress_bar);
+            holder.imageView = (ImageView) view.findViewById(R.id.app_image);
+            view.setTag(holder);
+        } else {
+            holder = (ViewHolder) view.getTag();
+        }
+
+        PackageManager packageManager = getContext().getPackageManager();
         NotificationAppView nv = this.getItem(position);
         String str_appName = null;
         Drawable icon = null;
@@ -52,12 +62,19 @@ public class NotificationAppViewAdapter extends ArrayAdapter<NotificationAppView
             e.printStackTrace();
         }
 
-        if (str_appName != null) appName.setText(str_appName);
-        else appName.setText(nv.AppName);
-        appCount.setText(Integer.toString(nv.Notifications));
-        progressBar.setProgress((int) ((double) nv.Notifications / (double) nv.MaxNotifications * 100));
-        if (icon != null) imageView.setImageDrawable(icon);
+        if (str_appName != null) holder.appName.setText(str_appName);
+        else holder.appName.setText(nv.AppName);
+        holder.appCount.setText(Integer.toString(nv.Notifications));
+        holder.progressBar.setProgress((int) ((double) nv.Notifications / (double) nv.MaxNotifications * 100));
+        if (icon != null) holder.imageView.setImageDrawable(icon);
 
         return view;
+    }
+
+    private static class ViewHolder {
+        TextView appName;
+        TextView appCount;
+        ProgressBar progressBar;
+        ImageView imageView;
     }
 }
