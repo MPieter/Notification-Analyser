@@ -19,13 +19,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/app_image"
-        android:layout_toRightOf="@id/app_image"/>
+        android:layout_toEndOf="@id/app_image"/>
     <TextView
         android:id="@+id/app_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="23"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignTop="@id/app_image"/>
     <ProgressBar
         style="@android:style/Widget.Holo.ProgressBar.Horizontal"
@@ -33,6 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/app_image"
-        android:layout_toRightOf="@id/app_image"
+        android:layout_toEndOf="@id/app_image"
         android:layout_marginBottom="5dp"/>
 </RelativeLayout>

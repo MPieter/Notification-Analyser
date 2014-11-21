@@ -1,7 +1,6 @@
 package com.tierep.notificationanalyser.ui;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
