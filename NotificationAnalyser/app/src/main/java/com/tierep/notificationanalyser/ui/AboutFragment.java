@@ -28,7 +28,7 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View main = inflater.inflate(R.layout.fragment_about, null);
+        View main = inflater.inflate(R.layout.fragment_about, container, false);
 
         TextView about_version = (TextView) main.findViewById(R.id.about_version);
         if (about_version.isInEditMode()) {

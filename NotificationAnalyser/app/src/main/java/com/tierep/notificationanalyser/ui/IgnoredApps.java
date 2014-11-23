@@ -107,7 +107,7 @@ public class IgnoredApps extends Activity {
         public View getView(final int position, View convertView, ViewGroup parent) {
             if (position == 0) {
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View listViewHeader = inflater.inflate(R.layout.list_ignored_apps_header, null);
+                View listViewHeader = inflater.inflate(R.layout.list_ignored_apps_header, null, false);
 
                 if (ignoredAppsAdapter.getCount() == 1) {
                     TextView ignoredAppsDescription = (TextView) listViewHeader.findViewById(R.id.ignored_apps_description);
@@ -117,7 +117,7 @@ public class IgnoredApps extends Activity {
                 return listViewHeader;
             } else {
                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View view = inflater.inflate(R.layout.list_ignored_apps_el, null);
+                View view = inflater.inflate(R.layout.list_ignored_apps_el, parent, false);
                 TextView appName = (TextView) view.findViewById(R.id.ignored_app_name);
                 ImageView appImage = (ImageView) view.findViewById(R.id.ignored_app_image);
 

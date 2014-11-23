@@ -42,7 +42,7 @@ public class TodayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View main = inflater.inflate(R.layout.fragment_today, null);
+        View main = inflater.inflate(R.layout.fragment_today, container, false);
         View viewHeader = inflater.inflate(R.layout.list_header_day_count, null);
 
         ListView listView = (ListView) main.findViewById(R.id.list_view);
