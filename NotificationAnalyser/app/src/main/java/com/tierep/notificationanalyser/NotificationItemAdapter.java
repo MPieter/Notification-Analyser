@@ -20,8 +20,9 @@ import java.util.List;
  * Created by pieter on 19/11/14.
  */
 public class NotificationItemAdapter extends ArrayAdapter<NotificationItem> {
+    private SimpleDateFormat dateFormatStd = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat dateFormatToday = new SimpleDateFormat("HH:mm");
-    private SimpleDateFormat dateFormatOlder = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat dateFormatOlder = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public NotificationItemAdapter(Context context, List<NotificationItem> objects) {
         super(context, 0, objects);
@@ -63,7 +64,7 @@ public class NotificationItemAdapter extends ArrayAdapter<NotificationItem> {
 
     private String formatDate(Date date) {
         Date currentDay = new Date();
-        if (dateFormatOlder.format(currentDay).equals(dateFormatOlder.format(date))) {
+        if (dateFormatStd.format(currentDay).equals(dateFormatStd.format(date))) {
             // Same day
             return dateFormatToday.format(date);
         } else {
