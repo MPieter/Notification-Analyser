@@ -30,6 +30,7 @@ import com.tierep.notificationanalyser.models.DatabaseHelper;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -110,13 +111,44 @@ public abstract class HistoryFragment extends Fragment {
         super.onResume();
         ListView listHistory = (ListView) this.getActivity().findViewById(R.id.list_view_history);
         try {
+
+            //rawData list does not contain days where we had no notifications
             List<NotificationDateView> rawData = this.getChartData(getResources().getInteger(R.integer.chart_items));
-            ArrayList<String> xVals = new ArrayList<String>(rawData.size());
-            ArrayList<BarEntry> yVals = new ArrayList<BarEntry>(rawData.size());
+            //add days without notifications to finalData list
+            List<NotificationDateView> finalData = new ArrayList<NotificationDateView>();
             for (int i = 0; i < rawData.size(); i++) {
-                Date currentDate = rawData.get(i).Date;
+                finalData.add(finalData.size(), rawData.get(i));
+                if (i < rawData.size() - 1) {
+                    Calendar nextRawDate = Calendar.getInstance();
+                    nextRawDate.setTime(rawData.get(i + 1).Date);
+                    nextRawDate.set(Calendar.HOUR_OF_DAY, 0);
+                    nextRawDate.set(Calendar.MINUTE, 0);
+                    nextRawDate.set(Calendar.SECOND, 0);
+                    nextRawDate.set(Calendar.MILLISECOND,0);
+
+                    Calendar nextCalendarDate = Calendar.getInstance();
+                    nextCalendarDate.setTime(rawData.get(i).Date);
+                    nextCalendarDate.add(Calendar.DAY_OF_YEAR, 1);
+                    nextCalendarDate.set(Calendar.HOUR_OF_DAY, 0);
+                    nextCalendarDate.set(Calendar.MINUTE, 0);
+                    nextCalendarDate.set(Calendar.SECOND, 0);
+                    nextCalendarDate.set(Calendar.MILLISECOND,0);
+
+                    while (!nextCalendarDate.equals(nextRawDate)){
+                        NotificationDateView emptyEntry = new NotificationDateView();
+                        emptyEntry.Date = nextCalendarDate.getTime();
+                        finalData.add(finalData.size(), emptyEntry);
+                        nextCalendarDate.add(Calendar.DAY_OF_YEAR, 1);
+                    }
+                }
+            }
+
+            ArrayList<String> xVals = new ArrayList<String>(finalData.size());
+            ArrayList<BarEntry> yVals = new ArrayList<BarEntry>(finalData.size());
+            for (int i = 0; i < finalData.size(); i++) {
+                Date currentDate = finalData.get(i).Date;
                 xVals.add(i, getDateFormat().format(currentDate));
-                yVals.add(i, new BarEntry(rawData.get(i).Notifications.floatValue(), i, currentDate));
+                yVals.add(i, new BarEntry(finalData.get(i).Notifications.floatValue(), i, currentDate));
             }
             BarDataSet dataSet = new BarDataSet(yVals, "test");
             BarData data = new BarData(xVals, dataSet);
