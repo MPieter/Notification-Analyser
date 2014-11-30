@@ -14,13 +14,13 @@ android {
         applicationId "com.tierep.notificationanalyser"
         minSdkVersion 18
         targetSdkVersion 21
-        versionCode 6
+        versionCode 7
         versionName "2.3"
     }
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
         }
     }
 }
