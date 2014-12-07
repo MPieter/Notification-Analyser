@@ -32,7 +32,8 @@ public class DemoDataGenerator {
     private Random random = new Random();
     private boolean hasGenerated = false;
     private int notificationsAmount = 500;
-    private List<Integer> dayToSkip = Arrays.asList(23, 24, 25, 26, 27, 28);
+    private List<Integer> dayToSkip = Arrays.asList(3, 4, 5, 6, 7, 8, 9);
+    private List<Integer> monthToSkip = Arrays.asList(10);
 
     public DemoDataGenerator(Context context) {
         this.context = context;
@@ -63,12 +64,11 @@ public class DemoDataGenerator {
         cal.set(Calendar.MINUTE, 0);
 
         for (int i = 0; i < notificationsAmount; i++) {
-            cal.add(Calendar.HOUR, random.nextInt(2) * (-1));
+            cal.add(Calendar.HOUR, random.nextInt(3) * (-1));
             cal.add(Calendar.MINUTE, random.nextInt(30));
 
-            if (dayToSkip != null && !dayToSkip.contains(cal.get(Calendar.DAY_OF_MONTH))  ){
+            if (dayToSkip != null && !dayToSkip.contains(cal.get(Calendar.DAY_OF_MONTH)) && !monthToSkip.contains(cal.get(Calendar.MONTH))){
                 dates.add(cal.getTime());
-                Log.d("Added to dates: ", cal.getTime().toString());
             }
             else{
                 i--;
